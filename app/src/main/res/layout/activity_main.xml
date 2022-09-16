@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.percentlayout.widget.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/background"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_marginLeftPercent="5%"
+        android:text=""
+        android:textColor="#000"
+        android:textSize="16dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold" />
+    <!--  左侧布局  -->
+    <androidx.percentlayout.widget.PercentRelativeLayout
+        android:id="@+id/left"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_heightPercent="100%"
+        app:layout_widthPercent="25%">
+
+
+        <!--  系统命令  -->
+
+        <include
+            android:id="@+id/main_menu"
+            layout="@layout/layout_main_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            ></include>
+
+        <include
+            android:id="@+id/car_menu"
+            layout="@layout/layout_car_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"></include>
+
+
+        <!--  视角调整-->
+
+
+    </androidx.percentlayout.widget.PercentRelativeLayout>
+
+
+    <!--  右侧布局  -->
+    <androidx.percentlayout.widget.PercentRelativeLayout
+        android:id="@+id/right"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_toRightOf="@id/left"
+        app:layout_heightPercent="100%"
+        app:layout_widthPercent="75%">
+
+
+        <!--        <androidx.percentlayout.widget.PercentRelativeLayout-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="1dp"-->
+        <!--            android:background="@drawable/button_circle_shape"-->
+        <!--            app:layout_heightPercent="96%"-->
+        <!--            app:layout_marginBottomPercent="2%"-->
+        <!--            app:layout_marginLeftPercent="3%"-->
+        <!--            app:layout_marginRightPercent="3%"-->
+        <!--            app:layout_marginTopPercent="5%"-->
+        <!--            app:layout_widthPercent="97%">-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginTop="10dp"-->
+        <!--                android:text="地图"-->
+        <!--                android:textColor="#000"-->
+        <!--                android:textSize="18dp"-->
+        <!--                android:textStyle="bold"-->
+        <!--                app:layout_marginLeftPercent="2%" />-->
+
+        <!--            <androidx.cardview.widget.CardView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:layout_marginTop="60dp"-->
+        <!--                android:background="@drawable/button_circle_shape_item"-->
+        <!--                app:cardCornerRadius="3dp"-->
+        <!--                app:cardElevation="0dp">-->
+
+        <!--                <TextView-->
+        <!--                    android:id="@+id/drama_text"-->
+        <!--                    android:layout_width="wrap_content"-->
+        <!--                    android:layout_height="match_parent"-->
+        <!--                    android:layout_marginLeft="20dp"-->
+        <!--                    android:layout_marginTop="30dp"-->
+        <!--                    android:layout_marginRight="20dp"-->
+        <!--                    android:textColor="@color/black"-->
+        <!--                    android:textSize="18dp" />-->
+
+        <!--                <ImageView-->
+        <!--                    android:id="@+id/drama_picture"-->
+        <!--                    android:layout_width="wrap_content"-->
+        <!--                    android:layout_height="match_parent"-->
+        <!--                    android:layout_marginTop="0dp"-->
+        <!--                    android:src="@drawable/deafult_drama"-->
+
+
+        <!--                    />-->
+
+
+        <!--    </androidx.cardview.widget.CardView>-->
+
+
+        <!--        </androidx.percentlayout.widget.PercentRelativeLayout>-->
+
+
+    </androidx.percentlayout.widget.PercentRelativeLayout>
+
+
+</androidx.percentlayout.widget.PercentRelativeLayout>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.percentlayout.widget.PercentRelativeLayout
+        android:id="@+id/system_control"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@drawable/button_circle_shape_left"
+        app:layout_heightPercent="96%"
+        app:layout_marginBottomPercent="2%"
+        app:layout_marginLeftPercent="3%"
+        app:layout_marginRightPercent="3%"
+        app:layout_marginTopPercent="5%"
+        app:layout_widthPercent="97%">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="车辆控制"
+            android:textColor="#000"
+            android:textSize="12dp"
+
+            app:layout_marginLeftPercent="2%"
+            app:layout_marginTopPercent="0%" />
+
+        <androidx.percentlayout.widget.PercentRelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@drawable/button_circle_shape"
+            app:layout_heightPercent="40%"
+            app:layout_marginLeftPercent="0%"
+            app:layout_marginTopPercent="5%"
+            app:layout_widthPercent="100%">
+
+
+            <!--  车辆选择  -->
+            <ListView
+                android:id="@+id/car_choose"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:divider="#ffffff"
+                android:dividerHeight="0dp"
+                android:listSelector="@color/white" />
+
+        </androidx.percentlayout.widget.PercentRelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="控制面板"
+            android:textColor="#000"
+            android:textSize="12dp"
+
+            app:layout_marginLeftPercent="2%"
+            app:layout_marginTopPercent="46%" />
+
+        <androidx.percentlayout.widget.PercentRelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@drawable/button_circle_shape"
+            app:layout_heightPercent="40%"
+            app:layout_marginLeftPercent="0%"
+            app:layout_marginTopPercent="50%"
+            app:layout_widthPercent="100%">
+
+            <androidx.percentlayout.widget.PercentRelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@drawable/button_circle_shape_left"
+                app:layout_heightPercent="100%"
+                app:layout_marginLeftPercent="0%"
+                app:layout_marginTopPercent="0%"
+                app:layout_widthPercent="50%">
+
+
+            </androidx.percentlayout.widget.PercentRelativeLayout>
+
+            <androidx.percentlayout.widget.PercentRelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@drawable/button_circle_shape_left"
+                app:layout_heightPercent="100%"
+                app:layout_marginLeftPercent="50%"
+                app:layout_marginTopPercent="0%"
+                app:layout_widthPercent="50%">
+
+                <androidx.percentlayout.widget.PercentRelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@drawable/button_circle_shape_item_blue"
+                    app:layout_heightPercent="20%"
+                    app:layout_marginLeftPercent="5%"
+                    app:layout_marginTopPercent="20%"
+                    app:layout_widthPercent="100%">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:text="自动视角"
+                        android:textColor="#1890ff"
+                        android:textSize="16dp" />
+
+
+                </androidx.percentlayout.widget.PercentRelativeLayout>
+
+
+            </androidx.percentlayout.widget.PercentRelativeLayout>
+
+
+        </androidx.percentlayout.widget.PercentRelativeLayout>
+
+        <androidx.percentlayout.widget.PercentRelativeLayout
+            android:id="@+id/back_app"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:layout_heightPercent="4%"
+            app:layout_marginLeftPercent="80%"
+            app:layout_marginTopPercent="0%"
+            app:layout_widthPercent="20%">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:text="返回"
+
+                android:textSize="12dp" />
+
+        </androidx.percentlayout.widget.PercentRelativeLayout>
+
+
+    </androidx.percentlayout.widget.PercentRelativeLayout>
+</androidx.percentlayout.widget.PercentRelativeLayout>
