@@ -4,6 +4,7 @@ import android.util.JsonReader;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.example.myapplication.bean.JsonBean;
 import com.example.myapplication.callback.CallBack;
 import com.example.myapplication.callback.NetWorkCallBack;
@@ -15,6 +16,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MyServer
@@ -25,26 +27,10 @@ public class MyServer
     public static volatile Socket MySocket = null;
     private JsonBean JsonBean;
     public static String SCENCE_REPLY = "SCENCE_REPLY";
-    public static String CAR_USING = "car_using";
+    public static String CAR_USING = "cars_using";
     private static String DEV_STATUS = "dev_status";
 
 
-
-    //socket 协议 55 ** ** **  56
-    // 55 [2] [3] 56
-
-    // 0A 执行情景 0B 检查车辆 0C 检查电量 0D 切换视角 08检查情景
-    // 默认为车号
-    // 服务器信息
-
-
-    // 第三位 定义
-    // [2] 为车号时：
-    // 00 连接成功 01 连接失败
-    // [2]为场景时：
-    // 00 场景初始化成功， 1-12 为每个场景是否执行完毕
-    // [2] 为电量时：
-    // 0-99 当前车辆电量
 
 
 
@@ -69,19 +55,22 @@ public class MyServer
                 InputStream inputStream = MySocket.getInputStream();
                 while(true)
                 {
-                    byte[] data = new byte[256];
+                    byte[] data = new byte[1024];
                     inputStream.read(data);
                     Map dataMaps = socketRead(data);
                     String type = (String) dataMaps.get("type");
 
                     if(type.equals(CAR_USING)){
                         Map objMap = (Map) dataMaps.get(CAR_USING);
-                        int [] carsId = (int[]) objMap.get("cars_id");
-                        callBack.createCar(carsId);
+
+                        JSONArray carsId =  (JSONArray)objMap.get("cars_id");
+                        List<Integer> listCarsId =  carsId.toJavaList(Integer.class);
+                        callBack.createCar(listCarsId);
                     }
                     if(type.equals(SCENCE_REPLY)){
                         Map mapSize = (Map) dataMaps.get(CAR_USING);
-                        int [] scenceId = (int[]) dataMaps.get("scence_id");
+                        int[] scenceId = (int[]) dataMaps.get("scence_id");
+
                         Map scencePoints = (Map) dataMaps.get("scence_points");
                         callBack.createPoint(scenceId,scencePoints);
 
@@ -91,17 +80,11 @@ public class MyServer
                         int carId = (int) dataMaps.get("car_id");
                         callBack.setCarStatus(carId,devStatus);
 
+                    }else {
+                        Log.i("Maps",dataMaps.toString()+type);
                     }
 
-
-
-
-
-
-
-
-
-
+                    Log.i("Socket", Arrays.toString(data));
                 }
             }catch (Exception e)
             {
@@ -117,7 +100,7 @@ public class MyServer
         if(data[0] == (byte) 0xff){
             if(data[1] == (byte) 0xaa){
                 //获取长度
-                int len =  data[2] + data[3];
+                int len =  (data[2]& 0xff) + (data[3]& 0xff);
                 //截取数据
                 byte[] jsonByte = new byte[len];
                 for (int i = 4,q=0; q<=len-1;i++,q++) {
@@ -139,7 +122,6 @@ public class MyServer
                 }
 
             }
-
         }
         maps.put("type","null");
         return maps;

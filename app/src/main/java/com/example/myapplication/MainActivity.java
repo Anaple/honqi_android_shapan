@@ -31,6 +31,7 @@ import com.example.myapplication.callback.NetWorkCallBack;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -72,13 +73,15 @@ public class MainActivity extends AppCompatActivity {
     }
     public void initSocket(){
         MyServer.BeginConnection(netWorkCallBack);
-        try {
-            MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_CARS,false));
-            MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_POINTS,false));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         MyServer.Begin(callBack);
+        if(MyServer.MySocket != null){
+            try {
+                MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_CARS,false));
+                MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_POINTS,false));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public final static int [] PIC_SRC={R.drawable.deafult_drama,R.drawable.drama_pic_1,R.drawable.drama_pic_2,R.drawable.drama_pic_3,R.drawable.drama_pic_4,R.drawable.drama_pic_5,R.drawable.drama_pic_6};
@@ -145,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
     public  Handler handlerCarItem = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
+            Log.i("Car","");
            carAdapter.notifyDataSetChanged();
 
         }
@@ -187,23 +191,30 @@ public class MainActivity extends AppCompatActivity {
     public CallBack callBack = new CallBack() {
 
         @Override
-        public void createCar(int[] carsId) {
+        public void createCar(List<Integer> carsId) {
+
             if(connectedCarArr.isEmpty()){
                 for (int carId:
                      carsId) {
                     connectedCarArr.add(new ConnectedCarBean(carId));
+                    handlerCarItem.sendMessage(new Message());
 
                 }
             }else {
+
                 for (int carId: carsId) {
-                    for(ConnectedCarBean car:connectedCarArr){
-                        if(car.getCarIndex() !=carId){
-                            connectedCarArr.add(new ConnectedCarBean(carId));
+                    int count =0;
+                    for(int i =0; i<connectedCarArr.size();i++){
+                        if(connectedCarArr.get(i).getCarIndex() ==carId){
+                            count++;
                         }
+                    }
+                    if(count == connectedCarArr.size()){
+                        connectedCarArr.add(new ConnectedCarBean(carId));
                     }
                 }
             }
-            handlerCarItem.sendMessage(new Message());
+
         }
 
         @Override
@@ -237,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initOnClickListener();
         initDramaBeans();
-        initTESTCAR();
         initSocket();
 
 
@@ -287,7 +297,8 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(() -> {
 
                     try {
-                        MyServer.MySocket.getOutputStream().write(Agreement.getCar((byte) 1));
+                        MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_CARS,false));
+                        MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_POINTS,false));
 
                     } catch (Exception e) {
                         Log.e("CarClick", "SOCKET", e);
