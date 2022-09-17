@@ -28,8 +28,10 @@ import com.example.myapplication.bean.ConnectedCarBean;
 import com.example.myapplication.callback.CallBack;
 import com.example.myapplication.callback.NetWorkCallBack;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,12 +63,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void initTESTCAR(){
-        connectedCarArr.add(new ConnectedCarBean(1,true,99,false));
-        connectedCarArr.add(new ConnectedCarBean(2,true,96,false));
-        connectedCarArr.add(new ConnectedCarBean(3,true,80,false));
-        connectedCarArr.add(new ConnectedCarBean(4,true,82,false));
+        connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
+        connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
+        connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
+        connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
 
 
+    }
+    public void initSocket(){
+        MyServer.BeginConnection(netWorkCallBack);
+        try {
+            MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_CARS,false));
+            MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_POINTS,false));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        MyServer.Begin(callBack);
     }
 
     public final static int [] PIC_SRC={R.drawable.deafult_drama,R.drawable.drama_pic_1,R.drawable.drama_pic_2,R.drawable.drama_pic_3,R.drawable.drama_pic_4,R.drawable.drama_pic_5,R.drawable.drama_pic_6};
@@ -130,10 +142,10 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @SuppressLint("HandlerLeak")
-    public  Handler handler4 = new Handler(){
+    public  Handler handlerCarItem = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
-            carBattery.setText(msg.what+"%");
+           carAdapter.notifyDataSetChanged();
 
         }
     };
@@ -173,39 +185,48 @@ public class MainActivity extends AppCompatActivity {
 
     //Socket通讯回调
     public CallBack callBack = new CallBack() {
-        @Override
-        public void initSuccess() {
-
-
-        }
-        @Override
-        public void DramaOperation(int index) {
-
-            handler.sendMessage(new Message());
-
-        }
 
         @Override
-        public void dianliang(int CarIndex) {
-            handler4.sendEmptyMessage(CarIndex);
-        }
+        public void createCar(int[] carsId) {
+            if(connectedCarArr.isEmpty()){
+                for (int carId:
+                     carsId) {
+                    connectedCarArr.add(new ConnectedCarBean(carId));
 
-        @Override
-        public void CarStateOK( int canUse) {
-            if(canUse == 0) {
-                    handler2.sendEmptyMessage(1);
+                }
             }else {
-                    handlerCarStatus.sendMessage(new Message());
+                for (int carId: carsId) {
+                    for(ConnectedCarBean car:connectedCarArr){
+                        if(car.getCarIndex() !=carId){
+                            connectedCarArr.add(new ConnectedCarBean(carId));
+                        }
+                    }
+                }
             }
+            handlerCarItem.sendMessage(new Message());
         }
 
         @Override
-        public void DramaFinish(int DramaIndex){
-
+        public void createPoint(int[] pointsId, Map pointsPosition) {
 
         }
 
+        @Override
+        public void setCarStatus(int carId, Map carStatus) {
+            for(ConnectedCarBean car:connectedCarArr){
+                if(car.getCarIndex() == carId){
+                    car.setCarBattery((Integer) carStatus.get("electricity"));
+                    car.setAngle((Integer) carStatus.get("angle"));
+                    car.setSpeed((Integer) carStatus.get("speed"));
+
+                }
+            }
+            handlerCarItem.sendMessage(new Message());
+
+        }
     };
+
+
 
 
     @Override
@@ -217,8 +238,9 @@ public class MainActivity extends AppCompatActivity {
         initOnClickListener();
         initDramaBeans();
         initTESTCAR();
-        MyServer.BeginConnection(netWorkCallBack);
-        MyServer.Begin(callBack);
+        initSocket();
+
+
 
     }
 
@@ -254,8 +276,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.network_success), Toast.LENGTH_SHORT).show();
             } else {
 
-                MyServer.BeginConnection(netWorkCallBack);
-                MyServer.Begin(callBack);
+                initSocket();
 
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                 connectedCarArr.clear();

@@ -1,22 +1,15 @@
 package com.example.myapplication.callback;
 
+import java.util.Map;
+
 public interface CallBack {
 
-    // 初始化成功
-    void initSuccess();
+    void createCar(int [] carsId);
 
-    // 情景
-    void DramaOperation(int index);
+    void createPoint(int[] pointsId, Map pointsPosition);
 
-    // 电量
-    void dianliang(int CarIndex);
+    void setCarStatus(int carId,Map carStatus);
 
-    // 检查车辆正常
-    void CarStateOK(int carIndex);
-
-
-    //
-    void DramaFinish(int dramaIndex);
 
 
 

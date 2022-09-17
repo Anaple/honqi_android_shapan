@@ -2,6 +2,14 @@ package com.example.myapplication.model;
 // socket 通讯操作封装
 public class Agreement {
 
+    public static String INIT_CARS = "{" +
+            "\"type\":\"cars_request\"" +
+            "}";
+    public static String INIT_POINTS = "{" +
+            "    \"type\":\"scence_request\"" +
+            "}";
+
+
     // 情景控制
     public static byte[] getDrama(byte dramaindex)
     {

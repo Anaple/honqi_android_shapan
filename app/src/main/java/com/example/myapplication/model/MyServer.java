@@ -24,6 +24,10 @@ public class MyServer
     public static int    PORT = 1235;
     public static volatile Socket MySocket = null;
     private JsonBean JsonBean;
+    public static String SCENCE_REPLY = "SCENCE_REPLY";
+    public static String CAR_USING = "car_using";
+    private static String DEV_STATUS = "dev_status";
+
 
 
     //socket 协议 55 ** ** **  56
@@ -67,35 +71,36 @@ public class MyServer
                 {
                     byte[] data = new byte[256];
                     inputStream.read(data);
-                    socketRead(data);
+                    Map dataMaps = socketRead(data);
+                    String type = (String) dataMaps.get("type");
+
+                    if(type.equals(CAR_USING)){
+                        Map objMap = (Map) dataMaps.get(CAR_USING);
+                        int [] carsId = (int[]) objMap.get("cars_id");
+                        callBack.createCar(carsId);
+                    }
+                    if(type.equals(SCENCE_REPLY)){
+                        Map mapSize = (Map) dataMaps.get(CAR_USING);
+                        int [] scenceId = (int[]) dataMaps.get("scence_id");
+                        Map scencePoints = (Map) dataMaps.get("scence_points");
+                        callBack.createPoint(scenceId,scencePoints);
+
+                    }
+                    if(type.equals(DEV_STATUS)){
+                        Map devStatus = (Map) dataMaps.get(DEV_STATUS);
+                        int carId = (int) dataMaps.get("car_id");
+                        callBack.setCarStatus(carId,devStatus);
+
+                    }
 
 
 
-                    // 车辆初始化
-                    if(data[1] == 0)
-                    {
-                        callBack.initSuccess();
-                    }
-                    // 情景
-                    if(data[1] == 10)
-                    {
-                        callBack.DramaOperation(data[2]);
-                    }
-                    // 电量
-                    if(data[1] == 11)
-                    {
-                        callBack.dianliang(data[2]);
-                    }
-                    // 车辆检查
-                    if(data[1] == 12)
-                    {
-                        callBack.CarStateOK(data[2]);
-                    }
-                    if(data[1] == 14){
-                        callBack.DramaFinish(data[2]);
-                    }
 
-                    Log.i("SOCKET", Arrays.toString(data));
+
+
+
+
+
 
                 }
             }catch (Exception e)
@@ -105,9 +110,10 @@ public class MyServer
         }).start();
     }
 
-    public static void socketRead(byte[] data){
+    public static Map socketRead(byte[] data){
         //包头[FF AA]
         //长度 第三 第四位
+        Map maps = new HashMap();
         if(data[0] == (byte) 0xff){
             if(data[1] == (byte) 0xaa){
                 //获取长度
@@ -118,29 +124,37 @@ public class MyServer
                     jsonByte[q] = data[i];
                 }
                 //转换为JsonMap
-                Map maps = new HashMap();
+
                 String jsonStr = new String(jsonByte);
                 try {
                      maps = (Map)JSON.parse(jsonStr);
-                    Log.i("SOCKET_MAP", maps.toString());
+                     Log.i("SOCKET_MAP", maps.toString());
+                     return maps;
+
                 }catch (com.alibaba.fastjson.JSONException e){
                     Log.i("SOCKET_MAP_E", jsonStr);
                     Log.i("SOCKET_Byte", Arrays.toString(jsonByte));
+                    maps.put("type","error");
+                    return maps;
                 }
 
             }
 
-
         }
+        maps.put("type","null");
+        return maps;
 
     }
 
-    public static byte[] createByte(String jsonStr){
+    public static byte[] createByte(String jsonStr , boolean isU3d){
         byte [] jsonByte = jsonStr.getBytes(StandardCharsets.UTF_8);
         int jsonByteLen = jsonByte.length;
         byte [] data = new byte[jsonByteLen+4];
         data[0] = (byte) 0xff;
         data[1] = (byte) 0xaa;
+        if(isU3d){
+            data[1] = (byte) 0xbb;
+        }
         if(jsonByteLen <=255) {
             data[2] = (byte) jsonByteLen;
             data[3] = (byte) 0x00;

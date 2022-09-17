@@ -3,19 +3,24 @@ package com.example.myapplication.bean;
 public class ConnectedCarBean {
 
     private int carIndex;
-    private boolean canUse;
     private int carBattery;
     private boolean isOnclick;
-
-
-    public ConnectedCarBean(int carIndex, boolean canUse, int carBattery, boolean isOnclick) {
-        this.carIndex = carIndex;
-        this.canUse = canUse;
-        this.carBattery = carBattery;
-        this.isOnclick = isOnclick;
-    }
+    private int speed;
+    private int angle;
 
     public ConnectedCarBean() {
+    }
+
+    public ConnectedCarBean(int carIndex) {
+        this.carIndex = carIndex;
+    }
+
+    public ConnectedCarBean(int carIndex, int carBattery, boolean isOnclick, int speed, int angle) {
+        this.carIndex = carIndex;
+        this.carBattery = carBattery;
+        this.isOnclick = isOnclick;
+        this.speed = speed;
+        this.angle = angle;
     }
 
     public int getCarIndex() {
@@ -24,14 +29,6 @@ public class ConnectedCarBean {
 
     public void setCarIndex(int carIndex) {
         this.carIndex = carIndex;
-    }
-
-    public boolean isCanUse() {
-        return canUse;
-    }
-
-    public void setCanUse(boolean canUse) {
-        this.canUse = canUse;
     }
 
     public int getCarBattery() {
@@ -48,5 +45,21 @@ public class ConnectedCarBean {
 
     public void setOnclick(boolean onclick) {
         isOnclick = onclick;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getAngle() {
+        return angle;
+    }
+
+    public void setAngle(int angle) {
+        this.angle = angle;
     }
 }
