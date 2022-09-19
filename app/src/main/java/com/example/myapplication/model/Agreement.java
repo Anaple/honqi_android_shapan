@@ -1,46 +1,44 @@
 package com.example.myapplication.model;
 // socket 通讯操作封装
 public class Agreement {
-
+    //初始化车辆
     public static String INIT_CARS = "{" +
             "\"type\":\"cars_request\"" +
             "}";
+    //初始化点位
     public static String INIT_POINTS = "{" +
-            "    \"type\":\"scence_request\"" +
+            "\"type\":\"scence_request\"" +
             "}";
 
-
-    // 情景控制
-    public static byte[] getDrama(byte dramaindex)
-    {
-        byte[] data = new byte[]{0x55,0x0A,dramaindex,0x56};
-        return data;
+    //终点发送
+    public static String NAV_END(int planNode,int carId){
+        return "{" +
+                "\"type\":\"nav_end\"," +
+                "\"nav_end\":{" +
+                "\"plan_node\":"+planNode+"," +
+                "\"car_id\":"+carId+"" +
+                "}" +
+                "}";
     }
 
-    // 车辆检查
-    public static byte[] getCar(byte CarIndex)
-    {
-        byte[] data = new byte[]{0x55,0x0C,CarIndex,0x56};
-        return data;
+    //情景发送
+    public static String DRAMA(int dramaId){
+        return "{" +
+                "\"type\":\"drama\"," +
+                "\"drama\":"+dramaId+"" +
+                "}";
     }
+    //U3D视角
+    public static String U3D_VIEW(int carId,int view){
+        return "{" +
+                "\"type\":\"u3d_view\"," +
+                "\"u3d_view\":{" +
+                "\"view\":"+view+"," +
+                "\"car_id\":" +carId+
+                "}" +
+                "}";
 
-
-    // 查询电量
-    public static byte[] getBattery(byte CarIndex)
-    {
-        byte[] data = new byte[]{0x55,0x0B,CarIndex,0x56};
-        return data;
-    }
-
-
-    // 点位到达回报
-
-    public static byte[] getDramaFinish(byte dramaIndex){
-        byte[] data = new byte[]{0x55,0x0E,dramaIndex,0x56};
-        return data;
-    }
-
-
+    };
 
 
 

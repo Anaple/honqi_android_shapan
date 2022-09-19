@@ -114,19 +114,7 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             if (msg.what > 0) {
                 //有效车辆
-//                carConnectIcon.setTextColor(getResources().getColor(R.color.start));
-                carConnect.setText(R.string.connected);
-                if (MyServer.MySocket != null) {
-                    new Thread(() -> {
-
-                        try {
-                            MyServer.MySocket.getOutputStream().write(Agreement.getBattery((byte) 0));
-
-                        } catch (Exception e) {
-                            Log.e("CarClick", "SOCKET", e);
-                        }
-                    }).start();
-                }
+                carConnect.setText(R.string.connected+":"+connectedCarArr.size());
 
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.car_connected) + "" + msg.what, Toast.LENGTH_SHORT).show();
             } else {
@@ -136,13 +124,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    @SuppressLint("HandlerLeak")
-    public  Handler handler3 = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            Toast.makeText(MainActivity.this, getResources().getString(R.string.cant_use_car) + "", Toast.LENGTH_SHORT).show();
-        }
-    };
 
     @SuppressLint("HandlerLeak")
     public  Handler handlerCarItem = new Handler(){
@@ -150,17 +131,6 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             Log.i("Car","");
            carAdapter.notifyDataSetChanged();
-
-        }
-    };
-
-    @SuppressLint("HandlerLeak")
-    public  Handler handlerCarStatus = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            carBattery.setText("未连接");
-//            carConnectIcon.setTextColor(getResources().getColor(R.color.gray));
-            carConnect.setText("未连接");
 
         }
     };
@@ -192,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void createCar(List<Integer> carsId) {
-
+            int cars = connectedCarArr.size();
             if(connectedCarArr.isEmpty()){
                 for (int carId:
                      carsId) {
@@ -205,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int carId: carsId) {
                     int count =0;
                     for(int i =0; i<connectedCarArr.size();i++){
-                        if(connectedCarArr.get(i).getCarIndex() ==carId){
+                        if(connectedCarArr.get(i).getCarIndex() != carId){
                             count++;
                         }
                     }
@@ -214,11 +184,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-
+            handler2.sendEmptyMessage(connectedCarArr.size() -cars );
         }
 
         @Override
-        public void createPoint(int[] pointsId, Map pointsPosition) {
+        public void createPoint(List<Integer> pointsId, Map pointsPosition) {
 
         }
 
@@ -363,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     new Thread(() -> {
                         try {
-                            byte[] data = Agreement.getDrama((byte) (position + 1));
+                            byte[] data = MyServer.createByte(Agreement.DRAMA(position+1),false);
                             CurrentDrama = 6;
                             if(!getItem(position).isStop&&!getItem(position).isPending) {
                                 for (int i = 0; i < CurrentDrama; i++) {
@@ -444,9 +414,9 @@ public class MainActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = View.inflate(MainActivity.this, R.layout.item_car, null);
             TextView carTitle = view.findViewById(R.id.car_title);
-            view.setOnClickListener( v->{
+            view.setOnClickListener( v-> {
 
-                clickCarId = position;
+                clickCarId = connectedCarArr.get(position).getCarIndex();
                 connectedCarArr.get(position).setOnclick(true);
 
                 for (ConnectedCarBean obj:connectedCarArr) {

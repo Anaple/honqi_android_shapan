@@ -62,17 +62,16 @@ public class MyServer
 
                     if(type.equals(CAR_USING)){
                         Map objMap = (Map) dataMaps.get(CAR_USING);
-
                         JSONArray carsId =  (JSONArray)objMap.get("cars_id");
                         List<Integer> listCarsId =  carsId.toJavaList(Integer.class);
                         callBack.createCar(listCarsId);
                     }
                     if(type.equals(SCENCE_REPLY)){
                         Map mapSize = (Map) dataMaps.get(CAR_USING);
-                        int[] scenceId = (int[]) dataMaps.get("scence_id");
-
+                        JSONArray scenceId = (JSONArray) dataMaps.get("scence_id");
+                        List<Integer> listScenceId =  scenceId.toJavaList(Integer.class);
                         Map scencePoints = (Map) dataMaps.get("scence_points");
-                        callBack.createPoint(scenceId,scencePoints);
+                        callBack.createPoint(listScenceId,scencePoints);
 
                     }
                     if(type.equals(DEV_STATUS)){
