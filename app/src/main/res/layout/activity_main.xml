@@ -59,17 +59,7 @@
         android:background="@drawable/deafult_drama"
         app:layout_heightPercent="100%"
         app:layout_widthPercent="75%">
-        <androidx.cardview.widget.CardView
-            android:layout_width="400px"
-            android:layout_height="400px">
 
-        <com.zwl9517hotmail.joysticklibrary.CircleViewByImage
-            android:id="@+id/joystick_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            />
-        </androidx.cardview.widget.CardView>
         <Button
             android:layout_width="100px"
             android:layout_height="100px"

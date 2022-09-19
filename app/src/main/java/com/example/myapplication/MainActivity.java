@@ -451,39 +451,55 @@ public class MainActivity extends AppCompatActivity {
 
 
         @Override
-        public void forwardMove() throws IOException {
+        public void forwardMove() {
 
             Log.i("MOVE","up");
-            if(MyServer.MySocket != null&&clickCarId !=0){
-                byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,1),true);
-                MyServer.MySocket.getOutputStream().write(data);
+            try{
+                if(MyServer.MySocket != null&&clickCarId !=0){
+                    byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,1),true);
+                    MyServer.MySocket.getOutputStream().write(data);
+                }
+            }catch (Exception e){
+
             }
         }
 
         @Override
-        public void backMove() throws IOException {
+        public void backMove() {
             Log.i("MOVE","down");
-            if(MyServer.MySocket != null&&clickCarId !=0){
-                byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,2),true);
-                MyServer.MySocket.getOutputStream().write(data);
+            try{
+                if(MyServer.MySocket != null&&clickCarId !=0){
+                    byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,2),true);
+                    MyServer.MySocket.getOutputStream().write(data);
+                }
+            }catch (Exception e){
+
             }
         }
 
         @Override
-        public void leftMove() throws IOException{
+        public void leftMove(){
             Log.i("MOVE","left");
-            if(MyServer.MySocket != null&&clickCarId !=0){
-                byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,3),true);
-                MyServer.MySocket.getOutputStream().write(data);
+            try{
+                if(MyServer.MySocket != null&&clickCarId !=0){
+                    byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,3),true);
+                    MyServer.MySocket.getOutputStream().write(data);
+                }
+            }catch (Exception e){
+
             }
         }
 
         @Override
-        public void rightMove() throws IOException{
+        public void rightMove(){
             Log.i("MOVE","right");
-            if(MyServer.MySocket != null&&clickCarId !=0){
-                byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,4),true);
-                MyServer.MySocket.getOutputStream().write(data);
+            try{
+                if(MyServer.MySocket != null&&clickCarId !=0){
+                    byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,4),true);
+                    MyServer.MySocket.getOutputStream().write(data);
+                }
+            }catch (Exception e){
+
             }
         }
 

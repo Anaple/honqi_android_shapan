@@ -256,7 +256,7 @@ public class CircleViewByImage extends FrameLayout {
         }
     }
 
-    private void gestures(int action, float x, float y) {
+    private void gestures(int action, float x, float y) throws IOException {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 firstX = x;
@@ -341,7 +341,7 @@ public class CircleViewByImage extends FrameLayout {
         SmallRockerCircleY = (float) (R * Math.sin(rad)) + centerY;
     }
 
-    private void gestureAction(MyAction myAction, double rad) {
+    private void gestureAction(MyAction myAction, double rad) throws IOException {
         switch (myAction) {
             case OUTSIDE_MOVE:
                 judgeDirection(rad);
@@ -362,7 +362,7 @@ public class CircleViewByImage extends FrameLayout {
     /**
      * 根据角度判断方向
      */
-    private void judgeDirection(double tempRad) {
+    private void judgeDirection(double tempRad) throws IOException {
         double small = 0.75;
         double big = 2.35;
         if (tempRad >= big || tempRad <= -big) {//左

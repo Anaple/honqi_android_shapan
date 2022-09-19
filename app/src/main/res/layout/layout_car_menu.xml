@@ -69,6 +69,17 @@
             app:layout_marginTopPercent="50%"
             app:layout_widthPercent="100%">
 
+
+                <com.zwl9517hotmail.joysticklibrary.CircleViewByImage
+                    android:id="@+id/joystick_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:background="@drawable/drama_btn"
+                    app:foreground="@drawable/car_change"
+
+                    />
+
+
             </androidx.percentlayout.widget.PercentRelativeLayout>
 
 
