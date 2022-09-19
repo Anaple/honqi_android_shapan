@@ -52,68 +52,32 @@
 
     <!--  右侧布局  -->
     <androidx.percentlayout.widget.PercentRelativeLayout
-        android:id="@+id/right"
+        android:id="@+id/map"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_toRightOf="@id/left"
+        android:background="@drawable/deafult_drama"
         app:layout_heightPercent="100%"
         app:layout_widthPercent="75%">
+        <androidx.cardview.widget.CardView
+            android:layout_width="400px"
+            android:layout_height="400px">
 
+        <com.zwl9517hotmail.joysticklibrary.CircleViewByImage
+            android:id="@+id/joystick_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            />
+        </androidx.cardview.widget.CardView>
+        <Button
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:layout_marginTop="1000px"
+            android:layout_marginLeft="200px"
+            android:background="@drawable/drama_btn">
 
-        <!--        <androidx.percentlayout.widget.PercentRelativeLayout-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="1dp"-->
-        <!--            android:background="@drawable/button_circle_shape"-->
-        <!--            app:layout_heightPercent="96%"-->
-        <!--            app:layout_marginBottomPercent="2%"-->
-        <!--            app:layout_marginLeftPercent="3%"-->
-        <!--            app:layout_marginRightPercent="3%"-->
-        <!--            app:layout_marginTopPercent="5%"-->
-        <!--            app:layout_widthPercent="97%">-->
-
-        <!--            <TextView-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_marginTop="10dp"-->
-        <!--                android:text="地图"-->
-        <!--                android:textColor="#000"-->
-        <!--                android:textSize="18dp"-->
-        <!--                android:textStyle="bold"-->
-        <!--                app:layout_marginLeftPercent="2%" />-->
-
-        <!--            <androidx.cardview.widget.CardView-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="match_parent"-->
-        <!--                android:layout_marginTop="60dp"-->
-        <!--                android:background="@drawable/button_circle_shape_item"-->
-        <!--                app:cardCornerRadius="3dp"-->
-        <!--                app:cardElevation="0dp">-->
-
-        <!--                <TextView-->
-        <!--                    android:id="@+id/drama_text"-->
-        <!--                    android:layout_width="wrap_content"-->
-        <!--                    android:layout_height="match_parent"-->
-        <!--                    android:layout_marginLeft="20dp"-->
-        <!--                    android:layout_marginTop="30dp"-->
-        <!--                    android:layout_marginRight="20dp"-->
-        <!--                    android:textColor="@color/black"-->
-        <!--                    android:textSize="18dp" />-->
-
-        <!--                <ImageView-->
-        <!--                    android:id="@+id/drama_picture"-->
-        <!--                    android:layout_width="wrap_content"-->
-        <!--                    android:layout_height="match_parent"-->
-        <!--                    android:layout_marginTop="0dp"-->
-        <!--                    android:src="@drawable/deafult_drama"-->
-
-
-        <!--                    />-->
-
-
-        <!--    </androidx.cardview.widget.CardView>-->
-
-
-        <!--        </androidx.percentlayout.widget.PercentRelativeLayout>-->
+        </Button>
 
 
     </androidx.percentlayout.widget.PercentRelativeLayout>

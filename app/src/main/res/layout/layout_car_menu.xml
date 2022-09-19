@@ -69,50 +69,6 @@
             app:layout_marginTopPercent="50%"
             app:layout_widthPercent="100%">
 
-            <androidx.percentlayout.widget.PercentRelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="@drawable/button_circle_shape_left"
-                app:layout_heightPercent="100%"
-                app:layout_marginLeftPercent="0%"
-                app:layout_marginTopPercent="0%"
-                app:layout_widthPercent="50%">
-
-
-            </androidx.percentlayout.widget.PercentRelativeLayout>
-
-            <androidx.percentlayout.widget.PercentRelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="@drawable/button_circle_shape_left"
-                app:layout_heightPercent="100%"
-                app:layout_marginLeftPercent="50%"
-                app:layout_marginTopPercent="0%"
-                app:layout_widthPercent="50%">
-
-                <androidx.percentlayout.widget.PercentRelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@drawable/button_circle_shape_item_blue"
-                    app:layout_heightPercent="20%"
-                    app:layout_marginLeftPercent="5%"
-                    app:layout_marginTopPercent="20%"
-                    app:layout_widthPercent="100%">
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="5dp"
-                        android:text="自动视角"
-                        android:textColor="#1890ff"
-                        android:textSize="16dp" />
-
-
-                </androidx.percentlayout.widget.PercentRelativeLayout>
-
-
             </androidx.percentlayout.widget.PercentRelativeLayout>
 
 
@@ -142,4 +98,3 @@
 
 
     </androidx.percentlayout.widget.PercentRelativeLayout>
-</androidx.percentlayout.widget.PercentRelativeLayout>

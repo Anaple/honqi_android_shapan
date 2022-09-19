@@ -26,9 +26,10 @@ public class MyServer
     public static int    PORT = 1235;
     public static volatile Socket MySocket = null;
     private JsonBean JsonBean;
-    public static String SCENCE_REPLY = "SCENCE_REPLY";
+    public static String SCENCE_REPLY = "scence_reply";
     public static String CAR_USING = "cars_using";
     private static String DEV_STATUS = "dev_status";
+    private static String DRAMA_FINISH = "drama_finish";
 
 
 
@@ -79,7 +80,13 @@ public class MyServer
                         int carId = (int) dataMaps.get("car_id");
                         callBack.setCarStatus(carId,devStatus);
 
-                    }else {
+                    }if(type.equals(DRAMA_FINISH)){
+                        int dramaId = (int) dataMaps.get("drama");
+                        callBack.dramaFinish(dramaId);
+
+                }
+
+                    else {
                         Log.i("Maps",dataMaps.toString()+type);
                     }
 

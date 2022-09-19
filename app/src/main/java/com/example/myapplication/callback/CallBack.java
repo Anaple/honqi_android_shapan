@@ -11,6 +11,10 @@ public interface CallBack {
 
     void setCarStatus(int carId,Map carStatus);
 
+    void dramaFinish(int dramaId);
+
+
+
 
 
 

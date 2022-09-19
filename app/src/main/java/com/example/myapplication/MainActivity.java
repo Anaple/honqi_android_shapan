@@ -27,6 +27,7 @@ import com.example.myapplication.model.MyServer;
 import com.example.myapplication.bean.ConnectedCarBean;
 import com.example.myapplication.callback.CallBack;
 import com.example.myapplication.callback.NetWorkCallBack;
+import com.zwl9517hotmail.joysticklibrary.CircleViewByImage;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     public ListView carList;
     public TextView carBattery;
     public TextView carConnect;
+
+    public CircleViewByImage circleViewByImage;
 
     public static ArrayList<ConnectedCarBean> connectedCarArr = new ArrayList<>();
     public static ArrayList<DramaBean> dramaBeans = new ArrayList<>();
@@ -84,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public final static int [] PIC_SRC={R.drawable.deafult_drama,R.drawable.drama_pic_1,R.drawable.drama_pic_2,R.drawable.drama_pic_3,R.drawable.drama_pic_4,R.drawable.drama_pic_5,R.drawable.drama_pic_6};
-    public final static int [] STRING_SRC = {R.string.deafult_text,R.string.drama_text_1,R.string.drama_text_2,R.string.drama_text_3,R.string.drama_text_4,R.string.drama_text_5,R.string.drama_text_6};
     @SuppressLint("HandlerLeak")
     public final Handler handler = new Handler() {
         @Override
@@ -205,6 +206,13 @@ public class MainActivity extends AppCompatActivity {
             handlerCarItem.sendMessage(new Message());
 
         }
+
+        @Override
+        public void dramaFinish(int dramaId) {
+
+            handler.sendEmptyMessage(dramaId);
+
+        }
     };
 
 
@@ -236,9 +244,10 @@ public class MainActivity extends AppCompatActivity {
         CarMenu = findViewById(R.id.car_menu);
         carConnect =findViewById(R.id.car_connect);
         ExitApp = findViewById(R.id.exit_app);
-
+        circleViewByImage =findViewById(R.id.joystick_view);
         DramaList.setAdapter(DramaAdapter);
         carList.setAdapter(carAdapter);
+        circleViewByImage.setCallback(callback2);
 
 
 
@@ -373,7 +382,6 @@ public class MainActivity extends AppCompatActivity {
                     }else {
 
                     }
-
                 }
             });
 
@@ -438,6 +446,67 @@ public class MainActivity extends AppCompatActivity {
 
 
     };
+
+    private CircleViewByImage.ActionCallback callback2 = new CircleViewByImage.ActionCallback() {
+
+
+        @Override
+        public void forwardMove() throws IOException {
+
+            Log.i("MOVE","up");
+            if(MyServer.MySocket != null&&clickCarId !=0){
+                byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,1),true);
+                MyServer.MySocket.getOutputStream().write(data);
+            }
+        }
+
+        @Override
+        public void backMove() throws IOException {
+            Log.i("MOVE","down");
+            if(MyServer.MySocket != null&&clickCarId !=0){
+                byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,2),true);
+                MyServer.MySocket.getOutputStream().write(data);
+            }
+        }
+
+        @Override
+        public void leftMove() throws IOException{
+            Log.i("MOVE","left");
+            if(MyServer.MySocket != null&&clickCarId !=0){
+                byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,3),true);
+                MyServer.MySocket.getOutputStream().write(data);
+            }
+        }
+
+        @Override
+        public void rightMove() throws IOException{
+            Log.i("MOVE","right");
+            if(MyServer.MySocket != null&&clickCarId !=0){
+                byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,4),true);
+                MyServer.MySocket.getOutputStream().write(data);
+            }
+        }
+
+        @Override
+        public void centerMove() {
+            Log.i("MOVE","5");
+        }
+
+        @Override
+        public void centerClick() {
+            Log.i("MOVE","6");
+        }
+
+        @Override
+        public void actionUp() {
+            Log.i("MOVE","7");
+        }
+    };
+
+
+
+
+
 
 
 }

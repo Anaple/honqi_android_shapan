@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.2712962962962963" />
+        <entry key="../../../../layout/custom_preview.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/luxpn/Desktop/shapanDemo-g2path/app/src/main/res/drawable/button_circle_shape_left.xml" value="0.539" />
         <entry key="..\:/Users/luxpn/Desktop/shapanDemo-g2path/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/luxpn/Desktop/shapanDemo-g2path/app/src/main/res/layout/item_drama.xml" value="0.275" />
@@ -16,7 +17,7 @@
         <entry key="app/src/main/res/drawable/drama_btn.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.147" />
         <entry key="app/src/main/res/drawable/shadow.xml" value="0.1655" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_car.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_drama.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_car_menu.xml" value="0.16536458333333334" />
