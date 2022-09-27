@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="车辆控制"
+            android:text="车辆选择"
             android:textColor="#000"
             android:textSize="12dp"
 
@@ -53,10 +53,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="控制面板"
+            android:text="视角控制"
             android:textColor="#000"
             android:textSize="12dp"
-
             app:layout_marginLeftPercent="2%"
             app:layout_marginTopPercent="46%" />
 
@@ -64,7 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@drawable/button_circle_shape"
-            app:layout_heightPercent="40%"
+            app:layout_heightPercent="50%"
             app:layout_marginLeftPercent="0%"
             app:layout_marginTopPercent="50%"
             app:layout_widthPercent="100%">
@@ -74,17 +73,23 @@
                     android:id="@+id/joystick_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:background="@drawable/drama_btn"
-                    app:foreground="@drawable/car_change"
+                    android:layout_gravity="bottom|right"
+                    app:background="@drawable/playview_platform_transverse_handle_normal"
+                    app:foreground="@drawable/control_foreground"
 
                     />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_marginTopPercent="90%"
+                android:text="恢复默认"
+                android:id="@+id/view_change_deafult"
+                android:textSize="10dp"
+                >
 
+            </Button>
             </androidx.percentlayout.widget.PercentRelativeLayout>
-
-
-        </androidx.percentlayout.widget.PercentRelativeLayout>
-
         <androidx.percentlayout.widget.PercentRelativeLayout
             android:id="@+id/back_app"
             android:layout_width="0dp"
@@ -95,17 +100,18 @@
             app:layout_marginTopPercent="0%"
             app:layout_widthPercent="20%">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:text="返回"
-
                 android:textSize="12dp" />
 
         </androidx.percentlayout.widget.PercentRelativeLayout>
+        </androidx.percentlayout.widget.PercentRelativeLayout>
+
+
 
 
     </androidx.percentlayout.widget.PercentRelativeLayout>

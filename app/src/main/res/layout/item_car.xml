@@ -5,10 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.percentlayout.widget.PercentRelativeLayout
-        android:id="@+id/temp1"
+        android:id="@+id/car_list"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@drawable/button_circle_shape_item"
+
         >
         <ImageView
             android:id="@+id/car_image_ico"
@@ -29,7 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/car_image_ico"
-            android:layout_toLeftOf="@id/battery_icon"
             app:layout_marginTopPercent="30%"
             android:text="车1"
             android:textSize="18dp"
@@ -59,7 +58,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="15dp"
-        android:layout_below="@id/temp1"
+        android:layout_below="@id/car_list"
+
         />
 
 

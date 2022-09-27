@@ -151,7 +151,7 @@
             app:layout_marginTopPercent="16%" />
 
         <androidx.percentlayout.widget.PercentRelativeLayout
-            android:id="@+id/car_info"
+            android:id="@+id/car_info2"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@drawable/button_circle_shape"
@@ -205,45 +205,43 @@
             </androidx.percentlayout.widget.PercentRelativeLayout>
 
             <androidx.percentlayout.widget.PercentRelativeLayout
-                android:id="@+id/temp2"
+                android:id="@+id/car_info"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="19dp"
-                android:background="@drawable/button_circle_shape_item"
-                app:layout_heightPercent="100%"
+                android:background="@drawable/button_circle_shape_item_blue"
+                style="@style/Widget.AppCompat.Button"
+                app:layout_heightPercent="80%"
+
                 app:layout_marginRightPercent="1%"
-                app:layout_marginTopPercent="0%"
+                app:layout_marginTopPercent="8%"
                 app:layout_widthPercent="47%">
+
+                <ImageView
+                    android:id="@+id/car_change_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/car_change" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="电池电量"
-                    android:textSize="8dp"
-                    app:layout_marginLeftPercent="15%" />
+                    android:text="控制车辆视角"
+                    android:textColor="#1890ff"
+                    android:textSize="16dp"
+                    android:layout_toRightOf="@id/car_change_icon"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginLeft="5dp"
+                    />
 
 
                 <!--  车辆图标  -->
-                <ImageView
-                    android:id="@+id/battery_icon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/dianchi"
-                    app:layout_heightPercent="85%"
-                    app:layout_marginLeftPercent="15%" />
-                <!--  剩余电量  -->
-                <TextView
-                    android:id="@+id/car_battery"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="70dp"
-                    android:text="@string/no_connect"
-                    android:textSize="12dp"
-                    app:layout_marginTopPercent="45%"
 
-                    />
             </androidx.percentlayout.widget.PercentRelativeLayout>
         </androidx.percentlayout.widget.PercentRelativeLayout>
 

@@ -22,7 +22,7 @@ import java.util.Map;
 public class MyServer
 {
 
-    public static String IP   = "192.168.31.105";
+    public static String IP   = "192.168.31.178";
     public static int    PORT = 1235;
     public static volatile Socket MySocket = null;
     private JsonBean JsonBean;
@@ -106,7 +106,8 @@ public class MyServer
         if(data[0] == (byte) 0xff){
             if(data[1] == (byte) 0xaa){
                 //获取长度
-                int len =  (data[2]& 0xff) + (data[3]& 0xff);
+                String lenStr = Integer.toHexString(data[2]&0xff)+Integer.toHexString(data[3]& 0xff);
+                int len = Integer.parseInt(lenStr,16);
                 //截取数据
                 byte[] jsonByte = new byte[len];
                 for (int i = 4,q=0; q<=len-1;i++,q++) {
@@ -144,12 +145,23 @@ public class MyServer
             data[1] = (byte) 0xbb;
         }
         if(jsonByteLen <=255) {
-            data[2] = (byte) jsonByteLen;
-            data[3] = (byte) 0x00;
+            data[2] = (byte) 0x00;
+            data[3] = (byte) jsonByteLen;
         }
         else {
-            data[2] = (byte) 0xff;
-            data[3] = (byte) ((byte) 255-jsonByteLen);
+         String hexString =  Integer.toHexString(jsonByteLen);
+
+
+         if(hexString.length() ==4) {
+             data[2] = Byte.parseByte(hexString.split("")[0] + hexString.split("")[1],16);
+             data[3] = Byte.parseByte(hexString.split("")[2] + hexString.split("")[3],16);
+         }else {
+             data[2] = Byte.parseByte(hexString.split("")[0] ,16);
+             data[3] = Byte.parseByte(hexString.split("")[1] + hexString.split("")[2],16);
+
+         }
+
+
         }
 
         for(int i =4 ;i<jsonByteLen+4;i++){

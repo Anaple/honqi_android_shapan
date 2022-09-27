@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,8 +48,9 @@ public class MainActivity extends AppCompatActivity {
     public PercentRelativeLayout Test;
     public ListView DramaList;
     public ListView carList;
-    public TextView carBattery;
     public TextView carConnect;
+
+    public Button view_deafult_btn;
 
     public CircleViewByImage circleViewByImage;
 
@@ -68,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public void initTESTCAR(){
         connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
-        connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
-        connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
-        connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
+        connectedCarArr.add(new ConnectedCarBean(2,99,false,1,2));
+        connectedCarArr.add(new ConnectedCarBean(3,99,false,1,2));
+        connectedCarArr.add(new ConnectedCarBean(4,99,false,1,2));
 
 
     }
@@ -154,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void error() {
             Toast.makeText(MainActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-            carBattery.setText(getResources().getString(R.string.network_error));
         }
     };
 
@@ -209,13 +210,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void dramaFinish(int dramaId) {
-
             handler.sendEmptyMessage(dramaId);
-
         }
     };
-
-
 
 
     @Override
@@ -228,6 +225,8 @@ public class MainActivity extends AppCompatActivity {
         initDramaBeans();
         initSocket();
 
+        initTESTCAR();
+
 
 
     }
@@ -237,13 +236,13 @@ public class MainActivity extends AppCompatActivity {
         carList = findViewById(R.id.car_choose);
         NetworkCheck = findViewById(R.id.network_check);
         CarCheck = findViewById(R.id.car_check);
-        carBattery = findViewById(R.id.car_battery);
         Test = findViewById(R.id.car_info);
         BackApp = findViewById(R.id.back_app);
         MainMenu = findViewById(R.id.main_menu);
         CarMenu = findViewById(R.id.car_menu);
         carConnect =findViewById(R.id.car_connect);
         ExitApp = findViewById(R.id.exit_app);
+        view_deafult_btn =findViewById(R.id.view_change_deafult);
         circleViewByImage =findViewById(R.id.joystick_view);
         DramaList.setAdapter(DramaAdapter);
         carList.setAdapter(carAdapter);
@@ -303,6 +302,24 @@ public class MainActivity extends AppCompatActivity {
         Test.setOnClickListener( view -> {
             MainMenu.setVisibility(View.GONE);
             CarMenu.setVisibility(View.VISIBLE);
+        });
+
+        view_deafult_btn.setOnClickListener( view -> {
+
+            if(MyServer.MySocket != null && clickCarId != 0){
+                new Thread(
+                        ()->{
+                            try{
+                                MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.U3D_VIEW(clickCarId,0),true));
+                            }catch (Exception e){
+
+
+                            }
+
+                        }
+
+                ).start();
+            }
         });
 
 
@@ -421,6 +438,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = View.inflate(MainActivity.this, R.layout.item_car, null);
+            View view1 = view.findViewById(R.id.car_list);
             TextView carTitle = view.findViewById(R.id.car_title);
             view.setOnClickListener( v-> {
 
@@ -435,9 +453,9 @@ public class MainActivity extends AppCompatActivity {
                 carAdapter.notifyDataSetChanged();
             });
             if(connectedCarArr.get(position).isOnclick()){
-                view.setBackgroundResource(R.drawable.button_circle_shape_item_blue);
+                view1.setBackgroundResource(R.drawable.button_circle_shape_item_blue);
             }else {
-                view.setBackgroundResource(R.drawable.button_circle_shape_item);
+                view1.setBackgroundResource(R.drawable.button_circle_shape_item);
             }
             carTitle.setText("车"+connectedCarArr.get(position).getCarIndex()+"    "+"电量剩余:"+connectedCarArr.get(position).getCarBattery()+"%");
             return view;
@@ -455,9 +473,15 @@ public class MainActivity extends AppCompatActivity {
 
             Log.i("MOVE","up");
             try{
-                if(MyServer.MySocket != null&&clickCarId !=0){
-                    byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,1),true);
-                    MyServer.MySocket.getOutputStream().write(data);
+                if(MyServer.MySocket != null &&clickCarId !=0){
+                    new Thread(() -> {
+                        byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId, 1), true);
+                        try {
+                            MyServer.MySocket.getOutputStream().write(data);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                 }
             }catch (Exception e){
 
@@ -468,9 +492,15 @@ public class MainActivity extends AppCompatActivity {
         public void backMove() {
             Log.i("MOVE","down");
             try{
-                if(MyServer.MySocket != null&&clickCarId !=0){
-                    byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,2),true);
-                    MyServer.MySocket.getOutputStream().write(data);
+                if(MyServer.MySocket != null && clickCarId !=0){
+                    new Thread(() -> {
+                        byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId, 2), true);
+                        try {
+                            MyServer.MySocket.getOutputStream().write(data);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                 }
             }catch (Exception e){
 
@@ -481,9 +511,15 @@ public class MainActivity extends AppCompatActivity {
         public void leftMove(){
             Log.i("MOVE","left");
             try{
-                if(MyServer.MySocket != null&&clickCarId !=0){
-                    byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,3),true);
-                    MyServer.MySocket.getOutputStream().write(data);
+                if(MyServer.MySocket != null && clickCarId !=0){
+                    new Thread(() -> {
+                        byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId, 3), true);
+                        try {
+                            MyServer.MySocket.getOutputStream().write(data);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                 }
             }catch (Exception e){
 
@@ -494,9 +530,15 @@ public class MainActivity extends AppCompatActivity {
         public void rightMove(){
             Log.i("MOVE","right");
             try{
-                if(MyServer.MySocket != null&&clickCarId !=0){
-                    byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId,4),true);
-                    MyServer.MySocket.getOutputStream().write(data);
+                if(MyServer.MySocket != null && clickCarId !=0){
+                    new Thread(() -> {
+                        byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId, 4), true);
+                        try {
+                            MyServer.MySocket.getOutputStream().write(data);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                 }
             }catch (Exception e){
 
