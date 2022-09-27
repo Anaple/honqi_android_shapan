@@ -50,6 +50,7 @@
         </androidx.percentlayout.widget.PercentRelativeLayout>
 
         <TextView
+            android:id="@+id/view_car_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -60,13 +61,16 @@
             app:layout_marginTopPercent="46%" />
 
         <androidx.percentlayout.widget.PercentRelativeLayout
+            android:id="@+id/joy"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@drawable/button_circle_shape"
             app:layout_heightPercent="50%"
             app:layout_marginLeftPercent="0%"
             app:layout_marginTopPercent="50%"
-            app:layout_widthPercent="100%">
+            app:layout_widthPercent="100%"
+            android:visibility="visible"
+            >
 
 
                 <com.zwl9517hotmail.joysticklibrary.CircleViewByImage
@@ -90,6 +94,59 @@
 
             </Button>
             </androidx.percentlayout.widget.PercentRelativeLayout>
+
+        <androidx.percentlayout.widget.PercentRelativeLayout
+            android:id="@+id/point_start"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_heightPercent="50%"
+            app:layout_marginLeftPercent="0%"
+            app:layout_marginTopPercent="50%"
+            app:layout_widthPercent="100%"
+            android:visibility="gone"
+            >
+
+            <androidx.percentlayout.widget.PercentRelativeLayout
+                android:id="@+id/point_start_btn"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="19dp"
+                android:background="@drawable/button_circle_shape_item_blue"
+                style="@style/Widget.AppCompat.Button"
+                app:layout_heightPercent="40%"
+
+                app:layout_marginRightPercent="1%"
+                app:layout_marginTopPercent="40%"
+                app:layout_widthPercent="100%">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/click_point"
+                    >
+
+                </TextView>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="前往目标点"
+                    android:textColor="#1890ff"
+                    android:textSize="20dp"
+                    android:layout_toRightOf="@id/car_change_icon"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="5dp"
+                    />
+
+
+
+                <!--  车辆图标  -->
+
+            </androidx.percentlayout.widget.PercentRelativeLayout>
+        </androidx.percentlayout.widget.PercentRelativeLayout>
         <androidx.percentlayout.widget.PercentRelativeLayout
             android:id="@+id/back_app"
             android:layout_width="0dp"
@@ -109,9 +166,14 @@
                 android:textSize="12dp" />
 
         </androidx.percentlayout.widget.PercentRelativeLayout>
+
+
+
+        </androidx.percentlayout.widget.PercentRelativeLayout>
+
         </androidx.percentlayout.widget.PercentRelativeLayout>
 
 
 
 
-    </androidx.percentlayout.widget.PercentRelativeLayout>
+

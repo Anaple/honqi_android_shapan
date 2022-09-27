@@ -17,11 +17,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.bean.DramaBean;
+import com.example.myapplication.bean.MapPoint;
 import com.example.myapplication.config.UIOperation;
 import com.example.myapplication.model.Agreement;
 import com.example.myapplication.model.MyServer;
@@ -33,8 +35,10 @@ import com.zwl9517hotmail.joysticklibrary.CircleViewByImage;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
     public PercentRelativeLayout CarCheck;
     public PercentRelativeLayout ExitApp;
     public PercentRelativeLayout BackApp;
+    public PercentRelativeLayout map;
+    public PercentRelativeLayout joy;
+    public PercentRelativeLayout pointClick;
+
+    public PercentRelativeLayout pointStartBtn;
 
     public PercentRelativeLayout MainMenu;
     public PercentRelativeLayout CarMenu;
@@ -49,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     public ListView DramaList;
     public ListView carList;
     public TextView carConnect;
+    public TextView viewCar2;
+    public TextView cilckPoint;
 
     public Button view_deafult_btn;
 
@@ -56,6 +67,41 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<ConnectedCarBean> connectedCarArr = new ArrayList<>();
     public static ArrayList<DramaBean> dramaBeans = new ArrayList<>();
+    public static ArrayList<MapPoint> mapPointArrayList = new ArrayList<>();
+
+    public void createPoint(int serverW,int serverH , int pointW,int pointH){
+        int w = map.getWidth();
+        int h = map.getHeight();
+        Button btn1 = new Button(this);
+        btn1.setBackground(getDrawable(R.drawable.drama_btn));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(40, 40);
+        layoutParams.setMargins((w/serverW)* pointW,(h/serverH)* pointH,0,0);//4个参数按顺序分别是左上右下
+        btn1.setLayoutParams(layoutParams);
+        mapPointArrayList.add(new MapPoint(pointId,btn1,serverW,serverH));
+        map.addView(btn1);
+
+        pointId++;
+        if (!mapPointArrayList.isEmpty()) {
+
+            for(MapPoint btn: mapPointArrayList){
+                int Id =  btn.getId();
+                Button btnView = btn.getButton();
+                btnView.setText(Id+"");
+                btnView.setOnClickListener(
+                        view1 -> {
+                            viewCar2.setText("终点控制");
+                            cilckPoint.setText("已选择终点"+Id);
+                            pointClick.setVisibility(View.VISIBLE);
+                            joy.setVisibility(View.GONE);
+                            pointIdClick = Id;
+
+                        }
+                );
+            }
+
+        }
+    }
+
 
 
     public void initDramaBeans(){
@@ -68,11 +114,55 @@ public class MainActivity extends AppCompatActivity {
         dramaBeans.add(new DramaBean(R.drawable.drama_a6_icon,"车云测试床",false,false));
 
     }
+    public int pointId =0;
+    public  int pointIdClick = 0;
     public void initTESTCAR(){
         connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
         connectedCarArr.add(new ConnectedCarBean(2,99,false,1,2));
         connectedCarArr.add(new ConnectedCarBean(3,99,false,1,2));
         connectedCarArr.add(new ConnectedCarBean(4,99,false,1,2));
+        map.setOnClickListener( view -> {
+           int w = map.getWidth();
+           int h = map.getHeight();
+           Log.i("Map","w:"+w+"h:"+h+"map:"+mapPointArrayList.size());
+           int serverW = 100;
+           int serverH = 300;
+
+
+            if(mapPointArrayList.size() < 10) {
+                Button btn1 = new Button(this);
+                btn1.setBackground(getDrawable(R.drawable.drama_btn));
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
+                layoutParams.setMargins((w/serverW)* new Random().nextInt(50),(h/serverH)* new Random().nextInt(80),0,0);//4个参数按顺序分别是左上右下
+                btn1.setLayoutParams(layoutParams);
+                mapPointArrayList.add(new MapPoint(pointId,btn1,serverW,serverH));
+                map.addView(btn1);
+
+                pointId++;
+                if (!mapPointArrayList.isEmpty()) {
+
+                    for(MapPoint btn: mapPointArrayList){
+                       int Id =  btn.getId();
+                       Button btnView = btn.getButton();
+                       btnView.setText(Id+"");
+                       btnView.setOnClickListener(
+                               view1 -> {
+                                   viewCar2.setText("终点控制");
+                                   cilckPoint.setText("已选择终点"+Id);
+                                   pointClick.setVisibility(View.VISIBLE);
+                                   joy.setVisibility(View.GONE);
+                                   pointIdClick = Id;
+
+                               }
+                       );
+                    }
+
+                }
+            }
+
+
+
+        });
 
 
     }
@@ -192,6 +282,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void createPoint(List<Integer> pointsId, Map pointsPosition) {
 
+
+
+
         }
 
         @Override
@@ -242,6 +335,13 @@ public class MainActivity extends AppCompatActivity {
         CarMenu = findViewById(R.id.car_menu);
         carConnect =findViewById(R.id.car_connect);
         ExitApp = findViewById(R.id.exit_app);
+        map = findViewById(R.id.map);
+        joy = findViewById(R.id.joy);
+        pointClick =findViewById(R.id.point_start);
+        viewCar2 = findViewById(R.id.view_car_2);
+        cilckPoint =findViewById(R.id.click_point);
+        pointStartBtn = findViewById(R.id.point_start_btn);
+
         view_deafult_btn =findViewById(R.id.view_change_deafult);
         circleViewByImage =findViewById(R.id.joystick_view);
         DramaList.setAdapter(DramaAdapter);
@@ -298,10 +398,16 @@ public class MainActivity extends AppCompatActivity {
         BackApp.setOnClickListener( view ->{
             MainMenu.setVisibility(View.VISIBLE);
             CarMenu.setVisibility(View.GONE);
+            joy.setVisibility(View.VISIBLE);
+            pointClick.setVisibility(View.GONE);
+            viewCar2.setText("视角控制");
         });
         Test.setOnClickListener( view -> {
             MainMenu.setVisibility(View.GONE);
             CarMenu.setVisibility(View.VISIBLE);
+            joy.setVisibility(View.VISIBLE);
+            pointClick.setVisibility(View.GONE);
+            viewCar2.setText("视角控制");
         });
 
         view_deafult_btn.setOnClickListener( view -> {
@@ -311,6 +417,22 @@ public class MainActivity extends AppCompatActivity {
                         ()->{
                             try{
                                 MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.U3D_VIEW(clickCarId,0),true));
+                            }catch (Exception e){
+
+
+                            }
+
+                        }
+
+                ).start();
+            }
+        });
+        pointStartBtn.setOnClickListener(view -> {
+            if(MyServer.MySocket != null && clickCarId != 0){
+                new Thread(
+                        ()->{
+                            try{
+                                MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.NAV_END(pointIdClick,clickCarId),false));
                             }catch (Exception e){
 
 
@@ -457,7 +579,7 @@ public class MainActivity extends AppCompatActivity {
             }else {
                 view1.setBackgroundResource(R.drawable.button_circle_shape_item);
             }
-            carTitle.setText("车"+connectedCarArr.get(position).getCarIndex()+"    "+"电量剩余:"+connectedCarArr.get(position).getCarBattery()+"%");
+            carTitle.setText("车"+connectedCarArr.get(position).getCarIndex()+" "+"电量剩余:"+connectedCarArr.get(position).getCarBattery()+"%"+"速度:"+connectedCarArr.get(position).getSpeed()+"km/h");
             return view;
 
         }

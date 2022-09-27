@@ -72,6 +72,7 @@ public class MyServer
                         JSONArray scenceId = (JSONArray) dataMaps.get("scence_id");
                         List<Integer> listScenceId =  scenceId.toJavaList(Integer.class);
                         Map scencePoints = (Map) dataMaps.get("scence_points");
+                        Map scenceWH = (Map) dataMaps.get("map_size");
                         callBack.createPoint(listScenceId,scencePoints);
 
                     }
