@@ -36,6 +36,56 @@
             app:layout_marginLeftPercent="3%"
             app:layout_marginRightPercent="3%"
             />
+        <TextView
+            android:id="@+id/car_battery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/car_title"
+            android:text="电量:正在获取"
+            android:textSize="12sp"
+            android:layout_marginTop="20sp"
+
+            >
+
+        </TextView>
+        <TextView
+            android:id="@+id/car_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/car_title"
+            android:layout_below="@+id/car_battery"
+            android:text="速度:正在获取"
+            android:textSize="12sp"
+            android:layout_marginTop="10sp"
+
+            >
+        </TextView>
+        <TextView
+            android:id="@+id/car_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/car_battery"
+            android:text="目的:正在获取"
+            android:textSize="12sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginLeft="15sp"
+
+            >
+
+        </TextView>
+        <TextView
+            android:id="@+id/car_will"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/car_battery"
+            android:layout_below="@+id/car_now"
+            android:text="位置:正在获取"
+            android:textSize="12sp"
+            android:layout_marginTop="10sp"
+            android:layout_marginLeft="15sp"
+
+            >
+        </TextView>
 
 
 <!--        &lt;!&ndash;  情景内容  &ndash;&gt;-->

@@ -130,12 +130,7 @@ public class MainActivity extends AppCompatActivity {
            int serverW = 100;
            int serverH = 300;
 
-
-
            createMapPoint(serverW,serverH, new Random().nextInt(50), new Random().nextInt(50));
-
-
-
 
 
         });
@@ -146,13 +141,18 @@ public class MainActivity extends AppCompatActivity {
         MyServer.BeginConnection(netWorkCallBack);
         MyServer.Begin(callBack);
         if(MyServer.MySocket != null){
-            try {
-                MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_CARS,false));
-                MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_POINTS,false));
-            } catch (IOException e) {
-                e.printStackTrace();
+            Thread thread = new Thread(() -> {
+                try {
+
+                    MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_CARS, false));
+                    MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_POINTS, false));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
+            );
+           thread.start();
+        };
     }
 
     @SuppressLint("HandlerLeak")
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-            handler2.sendEmptyMessage(connectedCarArr.size());
+            handler2.sendEmptyMessage(cars);
         }
 
         @Override
@@ -264,9 +264,6 @@ public class MainActivity extends AppCompatActivity {
                 createMapPoint(mapWidth,mapHeight,pointX,pointY);
 
             }
-
-
-
 
 
         }
@@ -302,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         initDramaBeans();
         initSocket();
 
-        initTESTCAR();
+       // initTESTCAR(); 测试函数
 
 
 
@@ -403,9 +400,7 @@ public class MainActivity extends AppCompatActivity {
                                 MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.U3D_VIEW(clickCarId,0),true));
                             }catch (Exception e){
 
-
                             }
-
                         }
 
                 ).start();
@@ -546,6 +541,10 @@ public class MainActivity extends AppCompatActivity {
             View view = View.inflate(MainActivity.this, R.layout.item_car, null);
             View view1 = view.findViewById(R.id.car_list);
             TextView carTitle = view.findViewById(R.id.car_title);
+            TextView carBattery = view.findViewById(R.id.car_battery);
+            TextView carSpeed = view.findViewById(R.id.car_speed);
+            TextView carNow =  view.findViewById(R.id.car_now);
+            TextView carWill = view.findViewById(R.id.car_will);
             view.setOnClickListener( v-> {
 
                 clickCarId = connectedCarArr.get(position).getCarIndex();
@@ -559,11 +558,13 @@ public class MainActivity extends AppCompatActivity {
                 carAdapter.notifyDataSetChanged();
             });
             if(connectedCarArr.get(position).isOnclick()){
-                view1.setBackgroundResource(R.drawable.button_circle_shape_item_blue);
+                view1.setBackgroundResource(R.drawable.item_blue_selected);
             }else {
                 view1.setBackgroundResource(R.drawable.button_circle_shape_item);
             }
-            carTitle.setText("车"+connectedCarArr.get(position).getCarIndex()+" "+"电量剩余:"+connectedCarArr.get(position).getCarBattery()+"%"+"速度:"+connectedCarArr.get(position).getSpeed()+"km/h");
+            carTitle.setText("车"+connectedCarArr.get(position).getCarIndex()+"  "+"  ");
+            carBattery.setText("电量:"+connectedCarArr.get(position).getCarBattery()+"%");
+            carSpeed.setText("速度:"+connectedCarArr.get(position).getSpeed()+"km/h");
             return view;
 
         }

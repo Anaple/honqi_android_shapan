@@ -25,7 +25,7 @@ public class MyServer
     public static String IP   = "192.168.31.178";
     public static int    PORT = 1235;
     public static volatile Socket MySocket = null;
-    private JsonBean JsonBean;
+
     public static String SCENCE_REPLY = "scence_reply";
     public static String CAR_USING = "cars_using";
     private static final String DEV_STATUS = "dev_status";
