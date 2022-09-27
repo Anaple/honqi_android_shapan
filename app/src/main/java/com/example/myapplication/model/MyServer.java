@@ -28,8 +28,8 @@ public class MyServer
     private JsonBean JsonBean;
     public static String SCENCE_REPLY = "scence_reply";
     public static String CAR_USING = "cars_using";
-    private static String DEV_STATUS = "dev_status";
-    private static String DRAMA_FINISH = "drama_finish";
+    private static final String DEV_STATUS = "dev_status";
+    private static final String DRAMA_FINISH = "drama_finish";
 
 
 
@@ -68,12 +68,12 @@ public class MyServer
                         callBack.createCar(listCarsId);
                     }
                     if(type.equals(SCENCE_REPLY)){
-                        Map mapSize = (Map) dataMaps.get(CAR_USING);
-                        JSONArray scenceId = (JSONArray) dataMaps.get("scence_id");
+                        Map map = (Map) dataMaps.get(SCENCE_REPLY);
+                        JSONArray scenceId = (JSONArray) map.get("scence_id");
                         List<Integer> listScenceId =  scenceId.toJavaList(Integer.class);
-                        Map scencePoints = (Map) dataMaps.get("scence_points");
-                        Map scenceWH = (Map) dataMaps.get("map_size");
-                        callBack.createPoint(listScenceId,scencePoints);
+                        Map scencePoints = (Map) map.get("scence_points");
+                        Map scenceWH = (Map) map.get("map_size");
+                        callBack.createPoint(listScenceId,scencePoints,scenceWH);
 
                     }
                     if(type.equals(DEV_STATUS)){

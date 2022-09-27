@@ -7,7 +7,7 @@ public interface CallBack {
 
     void createCar(List<Integer> carsId);
 
-    void createPoint(List<Integer> pointsId, Map pointsPosition);
+    void createPoint(List<Integer> pointsId, Map pointsPosition ,Map mapSize);
 
     void setCarStatus(int carId,Map carStatus);
 

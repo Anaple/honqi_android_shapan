@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<DramaBean> dramaBeans = new ArrayList<>();
     public static ArrayList<MapPoint> mapPointArrayList = new ArrayList<>();
 
-    public void createPoint(int serverW,int serverH , int pointW,int pointH){
+    public void createMapPoint(int serverW,int serverH , int pointW,int pointH){
         int w = map.getWidth();
         int h = map.getHeight();
         Button btn1 = new Button(this);
@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
                 btnView.setText(Id+"");
                 btnView.setOnClickListener(
                         view1 -> {
+                            CarMenu.setVisibility(View.VISIBLE);
+                            MainMenu.setVisibility(View.GONE);
                             viewCar2.setText("终点控制");
                             cilckPoint.setText("已选择终点"+Id);
                             pointClick.setVisibility(View.VISIBLE);
@@ -129,36 +131,10 @@ public class MainActivity extends AppCompatActivity {
            int serverH = 300;
 
 
-            if(mapPointArrayList.size() < 10) {
-                Button btn1 = new Button(this);
-                btn1.setBackground(getDrawable(R.drawable.drama_btn));
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
-                layoutParams.setMargins((w/serverW)* new Random().nextInt(50),(h/serverH)* new Random().nextInt(80),0,0);//4个参数按顺序分别是左上右下
-                btn1.setLayoutParams(layoutParams);
-                mapPointArrayList.add(new MapPoint(pointId,btn1,serverW,serverH));
-                map.addView(btn1);
 
-                pointId++;
-                if (!mapPointArrayList.isEmpty()) {
+           createMapPoint(serverW,serverH, new Random().nextInt(50), new Random().nextInt(50));
 
-                    for(MapPoint btn: mapPointArrayList){
-                       int Id =  btn.getId();
-                       Button btnView = btn.getButton();
-                       btnView.setText(Id+"");
-                       btnView.setOnClickListener(
-                               view1 -> {
-                                   viewCar2.setText("终点控制");
-                                   cilckPoint.setText("已选择终点"+Id);
-                                   pointClick.setVisibility(View.VISIBLE);
-                                   joy.setVisibility(View.GONE);
-                                   pointIdClick = Id;
 
-                               }
-                       );
-                    }
-
-                }
-            }
 
 
 
@@ -263,24 +239,32 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }else {
+                connectedCarArr.clear();
+                for (int carId:
+                        carsId) {
+                    connectedCarArr.add(new ConnectedCarBean(carId));
+                    handlerCarItem.sendMessage(new Message());
 
-                for (int carId: carsId) {
-                    int count =0;
-                    for(int i =0; i<connectedCarArr.size();i++){
-                        if(connectedCarArr.get(i).getCarIndex() != carId){
-                            count++;
-                        }
-                    }
-                    if(count == connectedCarArr.size()){
-                        connectedCarArr.add(new ConnectedCarBean(carId));
-                    }
                 }
+
+
             }
-            handler2.sendEmptyMessage(connectedCarArr.size() -cars );
+            handler2.sendEmptyMessage(connectedCarArr.size());
         }
 
         @Override
-        public void createPoint(List<Integer> pointsId, Map pointsPosition) {
+        public void createPoint(List<Integer> pointsId, Map pointsPosition ,Map mapSize) {
+
+            int mapWidth = (int) mapSize.get("w");
+            int mapHeight= (int) mapSize.get("h");
+            for (Integer pId:pointsId) {
+                Map navPointMap = (Map) pointsPosition.get(pId.toString());
+                int pointX = (int) navPointMap.get("x");
+                int pointY = (int) navPointMap.get("y");
+                createMapPoint(mapWidth,mapHeight,pointX,pointY);
+
+            }
+
 
 
 

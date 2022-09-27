@@ -14,7 +14,7 @@
         app:layout_marginLeftPercent="5%"
         android:text=""
         android:textColor="#000"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_marginTop="10dp"
         android:textStyle="bold" />
     <!--  左侧布局  -->
@@ -50,12 +50,11 @@
         android:id="@+id/map"
         android:layout_width="1018dp"
         android:layout_height="883dp"
-        android:layout_toRightOf="@id/left"
+        android:layout_toEndOf="@id/left"
         android:background="@drawable/map"
         app:layout_heightPercent="100%"
         app:layout_widthPercent="70%">
 
-        、
 
     </androidx.percentlayout.widget.PercentRelativeLayout>
 

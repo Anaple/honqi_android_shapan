@@ -22,7 +22,7 @@
             android:layout_marginTop="5dp"
             android:text="车辆选择"
             android:textColor="#000"
-            android:textSize="12dp"
+            android:textSize="12sp"
 
             app:layout_marginLeftPercent="2%"
             app:layout_marginTopPercent="0%" />
@@ -69,7 +69,7 @@
             app:layout_marginLeftPercent="0%"
             app:layout_marginTopPercent="50%"
             app:layout_widthPercent="100%"
-            android:visibility="visible"
+            android:visibility="gone"
             >
 
 
@@ -103,8 +103,20 @@
             app:layout_marginLeftPercent="0%"
             app:layout_marginTopPercent="50%"
             app:layout_widthPercent="100%"
-            android:visibility="gone"
+            android:visibility="visible"
             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/click_point"
+                android:text="text"
+                android:textSize="26dp"
+                android:layout_marginTop="10sp"
+                android:textColor="@color/black"
+
+                android:layout_centerHorizontal="true"
+                >
+            </TextView>
 
             <androidx.percentlayout.widget.PercentRelativeLayout
                 android:id="@+id/point_start_btn"
@@ -119,13 +131,7 @@
                 app:layout_marginRightPercent="1%"
                 app:layout_marginTopPercent="40%"
                 app:layout_widthPercent="100%">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/click_point"
-                    >
 
-                </TextView>
 
 
                 <TextView
@@ -133,12 +139,11 @@
                     android:layout_height="match_parent"
                     android:text="前往目标点"
                     android:textColor="#1890ff"
-                    android:textSize="20dp"
+                    android:textSize="26dp"
                     android:layout_toRightOf="@id/car_change_icon"
-                    android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_marginTop="30dp"
-                    android:layout_marginLeft="5dp"
+
                     />
 
 
