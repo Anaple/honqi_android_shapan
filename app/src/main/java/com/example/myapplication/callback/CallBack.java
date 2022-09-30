@@ -13,6 +13,10 @@ public interface CallBack {
 
     void dramaFinish(int dramaId);
 
+    void navPointSet(Map pointsPosition ,Map mapSize ,int count);
+
+    void carPointSet(int x ,int y ,int carId);
+
 
 
 

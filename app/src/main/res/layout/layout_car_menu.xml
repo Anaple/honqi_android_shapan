@@ -122,10 +122,10 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="19dp"
                 android:background="@drawable/button_circle_shape_item_blue"
-                app:layout_heightPercent="40%"
+                app:layout_heightPercent="20%"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:layout_marginRightPercent="1%"
-                app:layout_marginTopPercent="40%"
+                app:layout_marginTopPercent="70%"
                 app:layout_widthPercent="100%">
 
 
@@ -133,10 +133,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="30dp"
+
 
                     android:layout_toRightOf="@id/car_change_icon"
-                    android:text="前往目标点"
+                    android:text="出发"
                     android:textColor="#1890ff"
                     android:textSize="26dp"
 

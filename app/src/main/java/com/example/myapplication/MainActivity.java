@@ -35,10 +35,9 @@ import com.zwl9517hotmail.joysticklibrary.CircleViewByImage;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     public PercentRelativeLayout map;
     public PercentRelativeLayout joy;
     public PercentRelativeLayout pointClick;
-
+    public PercentRelativeLayout carListR;
     public PercentRelativeLayout pointStartBtn;
 
     public PercentRelativeLayout MainMenu;
@@ -68,8 +67,15 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<ConnectedCarBean> connectedCarArr = new ArrayList<>();
     public static ArrayList<DramaBean> dramaBeans = new ArrayList<>();
     public static ArrayList<MapPoint> mapPointArrayList = new ArrayList<>();
+    public static ArrayList<MapPoint> carPointArrayList = new ArrayList<>();
+    public static ArrayList<MapPoint> navPointArrayList = new ArrayList<>();
 
-    public void createMapPoint(int serverW,int serverH , int pointW,int pointH){
+
+    public int MapH;
+    public int MapW;
+
+
+    public void createMapPoint(int serverW,int serverH , int pointW,int pointH,int id){
         int w = map.getWidth();
         int h = map.getHeight();
         Button btn1 = new Button(this);
@@ -77,10 +83,14 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(40, 40);
         layoutParams.setMargins((w/serverW)* pointW,(h/serverH)* pointH,0,0);//4个参数按顺序分别是左上右下
         btn1.setLayoutParams(layoutParams);
-        mapPointArrayList.add(new MapPoint(pointId,btn1,serverW,serverH));
-        map.addView(btn1);
+        mapPointArrayList.add(new MapPoint(id,btn1,serverW,serverH));
+        map.post(new Runnable() {
+            @Override
+            public void run() {
+                map.addView(btn1);
+            }
+        });
 
-        pointId++;
         if (!mapPointArrayList.isEmpty()) {
 
             for(MapPoint btn: mapPointArrayList){
@@ -103,6 +113,85 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+    public void createNavPoint(int serverW,int serverH , int pointW,int pointH,int id){
+        int w = map.getWidth();
+        int h = map.getHeight();
+        Button btn1 = new Button(this);
+        btn1.setBackground(getDrawable(R.drawable.nav_u3d));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
+        layoutParams.setMargins((w/serverW)* pointW,(h/serverH)* pointH,0,0);//4个参数按顺序分别是左上右下
+        btn1.setLayoutParams(layoutParams);
+        navPointArrayList.add(new MapPoint(id,btn1,serverW,serverH));
+        map.post(new Runnable() {
+            @Override
+            public void run() {
+                map.addView(btn1);
+            }
+        });
+
+    }
+    public void createCarPoint(int serverW,int serverH , int pointW,int pointH,int id){
+        int w = map.getWidth();
+        int h = map.getHeight();
+        Button btn1 = new Button(this);
+        btn1.setBackground(getDrawable(R.drawable.nav_cars));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(50, 50);
+        layoutParams.setMargins((w/serverW)* pointW,(h/serverH)* pointH,0,0);//4个参数按顺序分别是左上右下
+        btn1.setLayoutParams(layoutParams);
+        carPointArrayList.add(new MapPoint(id,btn1,serverW,serverH));
+        map.post(new Runnable() {
+            @Override
+            public void run() {
+                map.addView(btn1);
+            }
+        });
+
+    }
+    public void changeCarPoint(int serverW,int serverH,int x ,int y ,int id)
+    {
+        for (MapPoint car:carPointArrayList
+             ) {
+            if(car.getId() == id)
+            {
+             car.setHeight(y);
+             car.setWidth(x);
+             car.getButton().post(new Runnable() {
+                 @Override
+                 public void run() {
+                     int w = map.getWidth();
+                     int h = map.getHeight();
+                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(50, 50);
+                     layoutParams.setMargins((w/serverW)* x,(h/serverH)* y,0,0);//4个参数按顺序分别是左上右下
+                     car.getButton().setLayoutParams(layoutParams);
+                 }
+             });
+
+            }
+
+        }
+    }
+    public void delView(Button view){
+        if(view != null){
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if(parent != null && parent instanceof ViewGroup){
+
+                parent.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        parent.removeView(view);
+                    }
+                });
+            }
+        }
+    }
+
+    public void delPointsAll(ArrayList<MapPoint> mapPoints){
+        for (MapPoint point:
+             mapPoints) {
+            delView(point.getButton());
+        }
+    }
+
 
 
 
@@ -116,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         dramaBeans.add(new DramaBean(R.drawable.drama_a6_icon,"车云测试床",false,false));
 
     }
-    public int pointId =0;
+
     public  int pointIdClick = 0;
     public void initTESTCAR(){
         connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
@@ -130,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
            int serverW = 100;
            int serverH = 300;
 
-           createMapPoint(serverW,serverH, new Random().nextInt(50), new Random().nextInt(50));
+           //createMapPoint(serverW,serverH, new Random().nextInt(50), new Random().nextInt(50));
 
 
         });
@@ -204,6 +293,56 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @SuppressLint("HandlerLeak")
+    public  Handler handlerCreatePoint= new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+
+            if(msg.what == 1) {
+                Bundle bundle = msg.getData();
+                MapH = bundle.getInt("mapHeight");
+                MapW = bundle.getInt("mapWidth");
+                Log.i("Point","X:"+ bundle.getInt("pointX")+"Y:"+bundle.getInt("pointY"));
+                createMapPoint(bundle.getInt("mapWidth"),bundle.getInt("mapHeight"),  bundle.getInt("pointX"), bundle.getInt("pointY"),bundle.getInt("id"));
+            }
+
+
+        }
+    };
+    @SuppressLint("HandlerLeak")
+    public  Handler handlerCreateCarPoint= new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            Bundle bundle = msg.getData();
+            int x = bundle.getInt("x");
+            int y = bundle.getInt("y");
+            int carId = bundle.getInt("id");
+            if(carPointArrayList.isEmpty()){
+                createCarPoint(MapW,MapH,x,y,carId);
+            }else {
+                int count = 0;
+                for (MapPoint carPoint:carPointArrayList
+                     ) {
+                    if(carPoint.getId() == carId){
+                        changeCarPoint(MapW,MapH,x,y,carId);
+                        break;
+                    }else {
+                        count++;
+                    }
+                    
+                }
+                if(count ==carPointArrayList.size()){
+                    createCarPoint(MapW,MapH,x,y,carId);
+                }
+            }
+
+
+
+
+        }
+    };
+
+
 
     //网络检查
 
@@ -240,6 +379,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }else {
                 connectedCarArr.clear();
+                delPointsAll(carPointArrayList);
+                carPointArrayList.clear();
                 for (int carId:
                         carsId) {
                     connectedCarArr.add(new ConnectedCarBean(carId));
@@ -259,10 +400,19 @@ public class MainActivity extends AppCompatActivity {
             int mapHeight= (int) mapSize.get("h");
             for (Integer pId:pointsId) {
                 Map navPointMap = (Map) pointsPosition.get(pId.toString());
-                int pointX = (int) navPointMap.get("x");
-                int pointY = (int) navPointMap.get("y");
-                createMapPoint(mapWidth,mapHeight,pointX,pointY);
-
+                int pointX = Integer.parseInt((String) navPointMap.get("x"));
+                int pointY = Integer.parseInt((String) navPointMap.get("y"));
+                Message msg = new Message();
+                msg.what = 1;
+                Bundle bundle = new Bundle();
+                bundle.putInt("mapWidth",mapWidth);
+                bundle.putInt("mapHeight",mapHeight);
+                bundle.putInt("pointX",pointX);
+                bundle.putInt("pointY",pointY);
+                bundle.putInt("id",pId);
+                Log.i("SOCC","X"+pointX+"Y"+pointY+"W"+mapWidth+"H"+mapHeight);
+                msg.setData(bundle);
+                handlerCreatePoint.handleMessage(msg);
             }
 
 
@@ -286,6 +436,37 @@ public class MainActivity extends AppCompatActivity {
         public void dramaFinish(int dramaId) {
             handler.sendEmptyMessage(dramaId);
         }
+
+        @Override
+        public void navPointSet(Map pointsPosition, Map mapSize, int count) {
+            if(!navPointArrayList.isEmpty()) {
+                delPointsAll(navPointArrayList);
+                navPointArrayList.clear();
+            }
+            Iterator<Map.Entry<String, Map>> entries = pointsPosition.entrySet().iterator();
+            while (entries.hasNext()){
+                Map.Entry<String,Map> entry = entries.next();
+                int id = Integer.parseInt(entry.getKey());
+                Map xy = entry.getValue();
+                int x =Integer.parseInt((String) xy.get("x"));
+                int y = Integer.parseInt((String) xy.get("y"));
+                createNavPoint(MapW,MapH,x,y,id);
+            }
+        }
+
+        @Override
+        public void carPointSet(int x, int y, int carId) {
+            Message msg = new Message();
+            msg.what = 1;
+            Bundle data  = new Bundle();
+            data.putInt("x",x);
+            data.putInt("y",y);
+            data.putInt("id",carId);
+            msg.setData(data);
+            handlerCreateCarPoint.handleMessage(msg);
+
+
+        }
     };
 
 
@@ -299,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
         initDramaBeans();
         initSocket();
 
-       // initTESTCAR(); 测试函数
+        initTESTCAR(); //测试函数
 
 
 
@@ -322,6 +503,7 @@ public class MainActivity extends AppCompatActivity {
         viewCar2 = findViewById(R.id.view_car_2);
         cilckPoint =findViewById(R.id.click_point);
         pointStartBtn = findViewById(R.id.point_start_btn);
+        carListR = findViewById(R.id.car_list);
 
         view_deafult_btn =findViewById(R.id.view_change_deafult);
         circleViewByImage =findViewById(R.id.joystick_view);

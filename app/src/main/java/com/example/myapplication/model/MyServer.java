@@ -1,15 +1,11 @@
 package com.example.myapplication.model;
 
-import android.util.JsonReader;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.example.myapplication.bean.JsonBean;
 import com.example.myapplication.callback.CallBack;
 import com.example.myapplication.callback.NetWorkCallBack;
-
-import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.net.Socket;
@@ -24,12 +20,16 @@ public class MyServer
 
     public static String IP   = "192.168.31.178";
     public static int    PORT = 1235;
+
     public static volatile Socket MySocket = null;
 
     public static String SCENCE_REPLY = "scence_reply";
     public static String CAR_USING = "cars_using";
     private static final String DEV_STATUS = "dev_status";
     private static final String DRAMA_FINISH = "drama_finish";
+    private static final String NAV_UNITY = "nav_unity";
+    private static final String SEEKER_POS ="seeker_pos";
+
 
 
 
@@ -85,8 +85,26 @@ public class MyServer
                         int dramaId = (int) dataMaps.get("drama");
                         callBack.dramaFinish(dramaId);
 
-                }
 
+                }if(type.equals(SEEKER_POS)){
+                        Map map = (Map) dataMaps.get(SEEKER_POS);
+                        int carId = (int) map.get("car_id");
+                        int x = (int) map.get("x");
+                        int y = (int) map.get("y");
+                        callBack.carPointSet(x,y,carId);
+
+
+                }if(type.equals(NAV_UNITY)){
+                    Map map = (Map) dataMaps.get(NAV_UNITY);
+                    int pointsCount = (int) map.get("points_count");
+                    Map navPoints = (Map) map.get("nav_points");
+                    Map navWH = (Map) map.get("map_size");
+                    callBack.navPointSet(navPoints,navWH,pointsCount);
+
+
+
+
+                }
                     else {
                         Log.i("Maps",dataMaps.toString()+type);
                     }

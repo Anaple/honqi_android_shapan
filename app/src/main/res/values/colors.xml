@@ -17,6 +17,7 @@
     <color name="gray">#8c8c8c</color>
     <color name="item_background">#F5F5F5</color>
     <color name="online">#52c41a</color>
+    <color name="nav_road">#ffec3d</color>
 item_background
 
 </resources>
