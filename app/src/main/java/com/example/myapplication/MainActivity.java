@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         int h = map.getHeight();
         Button btn1 = new Button(this);
         btn1.setBackground(getDrawable(R.drawable.nav_u3d));
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(20, 20);
         layoutParams.setMargins((w/serverW)* pointW,(h/serverH)* pointH,0,0);//4个参数按顺序分别是左上右下
         btn1.setLayoutParams(layoutParams);
         navPointArrayList.add(new MapPoint(id,btn1,serverW,serverH));
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         int h = map.getHeight();
         Button btn1 = new Button(this);
         btn1.setBackground(getDrawable(R.drawable.nav_cars));
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(50, 50);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
         layoutParams.setMargins((w/serverW)* pointW,(h/serverH)* pointH,0,0);//4个参数按顺序分别是左上右下
         btn1.setLayoutParams(layoutParams);
         carPointArrayList.add(new MapPoint(id,btn1,serverW,serverH));
@@ -153,18 +154,26 @@ public class MainActivity extends AppCompatActivity {
              ) {
             if(car.getId() == id)
             {
+                int w = map.getWidth();
+                int h = map.getHeight();
              car.setHeight(y);
              car.setWidth(x);
-             car.getButton().post(new Runnable() {
-                 @Override
-                 public void run() {
-                     int w = map.getWidth();
-                     int h = map.getHeight();
-                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(50, 50);
-                     layoutParams.setMargins((w/serverW)* x,(h/serverH)* y,0,0);//4个参数按顺序分别是左上右下
-                     car.getButton().setLayoutParams(layoutParams);
-                 }
-             });
+             delView(car.getButton());
+                Button btn1 = new Button(this);
+                btn1.setBackground(getDrawable(R.drawable.nav_cars));
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
+                layoutParams.setMargins((w/serverW)* x,(h/serverH)* y,0,0);//4个参数按顺序分别是左上右下
+                btn1.setLayoutParams(layoutParams);
+                car.setButton(btn1);
+                map.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        map.addView(btn1);
+                    }
+                });
+
+                break;
+
 
             }
 
@@ -228,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void initSocket(){
         MyServer.BeginConnection(netWorkCallBack);
-        MyServer.Begin(callBack);
+        MyServer.Begin(callBack,netWorkCallBack);
         if(MyServer.MySocket != null){
             Thread thread = new Thread(() -> {
                 try {
@@ -272,12 +281,20 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             if (msg.what > 0) {
                 //有效车辆
-                carConnect.setText(R.string.connected+":"+connectedCarArr.size());
+                carConnect.setText(getResources().getString(R.string.connected)+":"+connectedCarArr.size());
 
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.car_connected) + "" + msg.what, Toast.LENGTH_SHORT).show();
             } else {
+                carConnect.setText(getResources().getString(R.string.no_connect));
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.no_car_connected), Toast.LENGTH_SHORT).show();
             }
+        }
+    };
+    @SuppressLint("HandlerLeak")
+    public Handler handlerNetWorkErr = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg){
+            Toast.makeText(MainActivity.this, getResources().getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -305,7 +322,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("Point","X:"+ bundle.getInt("pointX")+"Y:"+bundle.getInt("pointY"));
                 createMapPoint(bundle.getInt("mapWidth"),bundle.getInt("mapHeight"),  bundle.getInt("pointX"), bundle.getInt("pointY"),bundle.getInt("id"));
             }
-
 
         }
     };
@@ -336,9 +352,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-
-
-
         }
     };
 
@@ -349,7 +362,6 @@ public class MainActivity extends AppCompatActivity {
     public NetWorkCallBack netWorkCallBack = new NetWorkCallBack() {
         @Override
         public void success(Socket socket) {
-
             Log.i("SOCKET", getResources().getString(R.string.network_success));
             MyServer.MySocket = socket;
             try {
@@ -360,7 +372,9 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         public void error() {
-            Toast.makeText(MainActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            Looper.prepare();
+            handlerNetWorkErr.handleMessage(new Message());
+
         }
     };
 
@@ -369,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void createCar(List<Integer> carsId) {
-            int cars = connectedCarArr.size();
+           // int cars = connectedCarArr.size();
             if(connectedCarArr.isEmpty()){
                 for (int carId:
                      carsId) {
@@ -390,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-            handler2.sendEmptyMessage(cars);
+            handler2.sendEmptyMessage(connectedCarArr.size());
         }
 
         @Override
@@ -410,7 +424,6 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putInt("pointX",pointX);
                 bundle.putInt("pointY",pointY);
                 bundle.putInt("id",pId);
-                Log.i("SOCC","X"+pointX+"Y"+pointY+"W"+mapWidth+"H"+mapHeight);
                 msg.setData(bundle);
                 handlerCreatePoint.handleMessage(msg);
             }
@@ -439,6 +452,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void navPointSet(Map pointsPosition, Map mapSize, int count) {
+            MapW = (int) mapSize.get("w");
+            MapH = (int) mapSize.get("h");
             if(!navPointArrayList.isEmpty()) {
                 delPointsAll(navPointArrayList);
                 navPointArrayList.clear();
@@ -452,6 +467,18 @@ public class MainActivity extends AppCompatActivity {
                 int y = Integer.parseInt((String) xy.get("y"));
                 createNavPoint(MapW,MapH,x,y,id);
             }
+
+            new Thread(()->{
+                try {
+                    Log.i("DEL","StartDel");
+                    Thread.sleep(5000);
+
+                    delPointsAll(navPointArrayList);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }).start();
         }
 
         @Override
@@ -480,7 +507,7 @@ public class MainActivity extends AppCompatActivity {
         initDramaBeans();
         initSocket();
 
-        initTESTCAR(); //测试函数
+       // initTESTCAR(); //测试函数
 
 
 
@@ -528,9 +555,20 @@ public class MainActivity extends AppCompatActivity {
             } else {
 
                 initSocket();
+                try {
+                    Thread.currentThread().sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(MyServer.MySocket != null) {
 
-                Toast.makeText(MainActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.network_success), Toast.LENGTH_SHORT).show();
+                }
                 connectedCarArr.clear();
+                handler2.sendEmptyMessage(connectedCarArr.size());
+                carAdapter.notifyDataSetChanged();
             }
         });
         CarCheck.setOnClickListener(view -> {
@@ -566,11 +604,17 @@ public class MainActivity extends AppCompatActivity {
             viewCar2.setText("视角控制");
         });
         Test.setOnClickListener( view -> {
-            MainMenu.setVisibility(View.GONE);
-            CarMenu.setVisibility(View.VISIBLE);
-            joy.setVisibility(View.VISIBLE);
-            pointClick.setVisibility(View.GONE);
-            viewCar2.setText("视角控制");
+            if(MyServer.MySocket != null && !connectedCarArr.isEmpty()) {
+                MainMenu.setVisibility(View.GONE);
+                CarMenu.setVisibility(View.VISIBLE);
+                joy.setVisibility(View.VISIBLE);
+                pointClick.setVisibility(View.GONE);
+                viewCar2.setText("视角控制");
+            }else {
+
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.no_car_live), Toast.LENGTH_SHORT).show();
+
+            }
         });
 
         view_deafult_btn.setOnClickListener( view -> {
@@ -596,9 +640,7 @@ public class MainActivity extends AppCompatActivity {
                                 MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.NAV_END(pointIdClick,clickCarId),false));
                             }catch (Exception e){
 
-
                             }
-
                         }
 
                 ).start();
@@ -658,6 +700,7 @@ public class MainActivity extends AppCompatActivity {
                                 handlerDrama.sendMessage(new Message());
                                 MyServer.MySocket.getOutputStream().write(data);
                             }else {
+                                Looper.prepare();
                                 Toast.makeText(MainActivity.this, getResources().getString(R.string.drama_wait), Toast.LENGTH_SHORT).show();
                             }
 
@@ -669,17 +712,15 @@ public class MainActivity extends AppCompatActivity {
                     if(!getItem(position).isStop&&!getItem(position).isPending){
                         CurrentDrama = 6;
                         for (int i=0 ; i<CurrentDrama ;i++){
-                            if(i==position){
-                                getItem(position).isStop = true;
-                                getItem(position).isPending =false;
-                            }else {
+
                                 getItem(i).isStop =false;
                                 getItem(i).isPending = true;
-                            }
+
                         }
                         DramaAdapter.notifyDataSetChanged();
                         Toast.makeText(MainActivity.this, getResources().getString(R.string.drama_wait), Toast.LENGTH_SHORT).show();
                     }else {
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.drama_wait), Toast.LENGTH_SHORT).show();
 
                     }
                 }
