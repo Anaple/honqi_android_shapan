@@ -1,10 +1,10 @@
 package com.example.myapplication;
 
 
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.percentlayout.widget.PercentRelativeLayout;
+
 import android.annotation.SuppressLint;
 
 
@@ -76,15 +76,18 @@ public class MainActivity extends AppCompatActivity {
     public int MapW;
 
 
-    public void createMapPoint(int serverW,int serverH , int pointW,int pointH,int id){
+    public void createMapPoint(int serverW, int serverH, int pointW, int pointH, int id) {
         int w = map.getWidth();
-        int h = map.getHeight();
+        int h = map.getHeight()+120;
+        double dbw = (double) w / (double) serverW ;
+        double dbh = (double) h / (double) serverW;
+
         Button btn1 = new Button(this);
         btn1.setBackground(getDrawable(R.drawable.drama_btn));
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(40, 40);
-        layoutParams.setMargins((w/serverW)* pointW,(h/serverH)* pointH,0,0);//4个参数按顺序分别是左上右下
+        layoutParams.setMargins((int) (dbw * pointW)-15, (int) (dbh * pointH), 0, 0);//4个参数按顺序分别是左上右下
         btn1.setLayoutParams(layoutParams);
-        mapPointArrayList.add(new MapPoint(id,btn1,serverW,serverH));
+        mapPointArrayList.add(new MapPoint(id, btn1, serverW, serverH));
         map.post(new Runnable() {
             @Override
             public void run() {
@@ -94,52 +97,60 @@ public class MainActivity extends AppCompatActivity {
 
         if (!mapPointArrayList.isEmpty()) {
 
-            for(MapPoint btn: mapPointArrayList){
-                int Id =  btn.getId();
+            for (MapPoint btn : mapPointArrayList) {
+                int Id = btn.getId();
                 Button btnView = btn.getButton();
-                btnView.setText(Id+"");
-                btnView.setOnClickListener(
-                        view1 -> {
-                            CarMenu.setVisibility(View.VISIBLE);
-                            MainMenu.setVisibility(View.GONE);
-                            viewCar2.setText("终点控制");
-                            cilckPoint.setText("已选择终点"+Id);
-                            pointClick.setVisibility(View.VISIBLE);
-                            joy.setVisibility(View.GONE);
-                            pointIdClick = Id;
+                btnView.setText(Id + "");
+                btnView.setOnClickListener(view1 -> {
+                    CarMenu.setVisibility(View.VISIBLE);
+                    MainMenu.setVisibility(View.GONE);
+                    viewCar2.setText("终点控制");
+                    cilckPoint.setText("已选择终点" + Id);
+                    pointClick.setVisibility(View.VISIBLE);
+                    joy.setVisibility(View.GONE);
+                    pointIdClick = Id;
 
-                        }
-                );
+                });
             }
 
         }
     }
-    public void createNavPoint(int serverW,int serverH , int pointW,int pointH,int id){
+
+    public void createNavPoint(int serverW, int serverH, int pointW, int pointH, int id) {
+
         int w = map.getWidth();
-        int h = map.getHeight();
+        int h = map.getHeight()+100+20;
+        double dbw = (double) w / (double) serverW ;
+        double dbh = (double) h / (double) serverW;
+
         Button btn1 = new Button(this);
         btn1.setBackground(getDrawable(R.drawable.nav_u3d));
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(20, 20);
-        layoutParams.setMargins((w/serverW)* pointW,(h/serverH)* pointH,0,0);//4个参数按顺序分别是左上右下
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(10, 10);
+        layoutParams.setMargins((int) (dbw * pointW), (int) (dbh * pointH)+10, 0, 0);//4个参数按顺序分别是左上右下
         btn1.setLayoutParams(layoutParams);
-        navPointArrayList.add(new MapPoint(id,btn1,serverW,serverH));
+        navPointArrayList.add(new MapPoint(id, btn1, serverW, serverH));
         map.post(new Runnable() {
             @Override
             public void run() {
                 map.addView(btn1);
             }
         });
+        Log.i("Points","w:"+w+"h:"+h+"mpw:"+dbw+"mph:"+dbh+"PointH:"+(dbh * pointH)+"pointW:"+(dbw * pointW));
 
     }
-    public void createCarPoint(int serverW,int serverH , int pointW,int pointH,int id){
+
+    public void createCarPoint(int serverW, int serverH, int pointW, int pointH, int id) {
         int w = map.getWidth();
-        int h = map.getHeight();
+        int h = map.getHeight()+120;
+        double dbw = (double) w / (double) serverW ;
+        double dbh = (double) h / (double) serverW;
+
         Button btn1 = new Button(this);
         btn1.setBackground(getDrawable(R.drawable.nav_cars));
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
-        layoutParams.setMargins((w/serverW)* pointW,(h/serverH)* pointH,0,0);//4个参数按顺序分别是左上右下
+        layoutParams.setMargins((int) (dbw * pointW), (int) (dbh * pointH)+10, 0, 0);//4个参数按顺序分别是左上右下
         btn1.setLayoutParams(layoutParams);
-        carPointArrayList.add(new MapPoint(id,btn1,serverW,serverH));
+        carPointArrayList.add(new MapPoint(id, btn1, serverW, serverH));
         map.post(new Runnable() {
             @Override
             public void run() {
@@ -148,21 +159,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-    public void changeCarPoint(int serverW,int serverH,int x ,int y ,int id)
-    {
-        for (MapPoint car:carPointArrayList
-             ) {
-            if(car.getId() == id)
-            {
+
+    public void changeCarPoint(int serverW, int serverH, int x, int y, int id) {
+        for (MapPoint car : carPointArrayList) {
+            if (car.getId() == id) {
                 int w = map.getWidth();
-                int h = map.getHeight();
-             car.setHeight(y);
-             car.setWidth(x);
-             delView(car.getButton());
+                int h = map.getHeight()+120;
+                double dbw = (double) w / (double) serverW ;
+                double dbh = (double) h / (double) serverW;
+                car.setHeight(y);
+                car.setWidth(x);
+                delView(car.getButton());
                 Button btn1 = new Button(this);
                 btn1.setBackground(getDrawable(R.drawable.nav_cars));
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
-                layoutParams.setMargins((w/serverW)* x,(h/serverH)* y,0,0);//4个参数按顺序分别是左上右下
+                layoutParams.setMargins((int) (dbw * x), (int) (dbh * y)+10, 0, 0);//4个参数按顺序分别是左上右下
                 btn1.setLayoutParams(layoutParams);
                 car.setButton(btn1);
                 map.post(new Runnable() {
@@ -179,10 +190,11 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-    public void delView(Button view){
-        if(view != null){
+
+    public void delView(Button view) {
+        if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
-            if(parent != null && parent instanceof ViewGroup){
+            if (parent != null && parent instanceof ViewGroup) {
 
                 parent.post(new Runnable() {
                     @Override
@@ -194,51 +206,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void delPointsAll(ArrayList<MapPoint> mapPoints){
-        for (MapPoint point:
-             mapPoints) {
+    public void delPointsAll(ArrayList<MapPoint> mapPoints) {
+        for (MapPoint point : mapPoints) {
             delView(point.getButton());
         }
     }
 
 
+    public void initDramaBeans() {
 
-
-    public void initDramaBeans(){
-
-        dramaBeans.add(new DramaBean(R.drawable.drama_a1_icon,"灌装测试床",false,false));
-        dramaBeans.add(new DramaBean(R.drawable.drama_a2_icon,"车人测试床",false,false));
-        dramaBeans.add(new DramaBean(R.drawable.drama_a3_icon,"车内测试床",false,false));
-        dramaBeans.add(new DramaBean(R.drawable.drama_a4_icon,"车际测试床-车路通信",false,false));
-        dramaBeans.add(new DramaBean(R.drawable.drama_a5_icon,"车际测试床-车车通信",false,false));
-        dramaBeans.add(new DramaBean(R.drawable.drama_a6_icon,"车云测试床",false,false));
+        dramaBeans.add(new DramaBean(R.drawable.drama_a1_icon, "灌装测试床", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama_a2_icon, "车人测试床", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama_a3_icon, "车内测试床", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama_a4_icon, "车际测试床-车路通信", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama_a5_icon, "车际测试床-车车通信", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama_a6_icon, "车云测试床", false, false));
 
     }
 
-    public  int pointIdClick = 0;
-    public void initTESTCAR(){
-        connectedCarArr.add(new ConnectedCarBean(1,99,false,1,2));
-        connectedCarArr.add(new ConnectedCarBean(2,99,false,1,2));
-        connectedCarArr.add(new ConnectedCarBean(3,99,false,1,2));
-        connectedCarArr.add(new ConnectedCarBean(4,99,false,1,2));
-        map.setOnClickListener( view -> {
-           int w = map.getWidth();
-           int h = map.getHeight();
-           Log.i("Map","w:"+w+"h:"+h+"map:"+mapPointArrayList.size());
-           int serverW = 100;
-           int serverH = 300;
+    public int pointIdClick = 0;
 
-           //createMapPoint(serverW,serverH, new Random().nextInt(50), new Random().nextInt(50));
+    public void initTESTCAR() {
+        connectedCarArr.add(new ConnectedCarBean(1, 99, false, 1, 2));
+        connectedCarArr.add(new ConnectedCarBean(2, 99, false, 1, 2));
+        connectedCarArr.add(new ConnectedCarBean(3, 99, false, 1, 2));
+        connectedCarArr.add(new ConnectedCarBean(4, 99, false, 1, 2));
+        map.setOnClickListener(view -> {
+            int w = map.getWidth();
+            int h = map.getHeight();
+            Log.i("Map", "w:" + w + "h:" + h + "map:" + mapPointArrayList.size());
+            int serverW = 100;
+            int serverH = 300;
+
+            //createMapPoint(serverW,serverH, new Random().nextInt(50), new Random().nextInt(50));
 
 
         });
 
 
     }
-    public void initSocket(){
+
+    public void initSocket() {
         MyServer.BeginConnection(netWorkCallBack);
-        MyServer.Begin(callBack,netWorkCallBack);
-        if(MyServer.MySocket != null){
+        MyServer.Begin(callBack, netWorkCallBack);
+        if (MyServer.MySocket != null) {
             Thread thread = new Thread(() -> {
                 try {
 
@@ -247,10 +258,10 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-            );
-           thread.start();
-        };
+            });
+            thread.start();
+        }
+        ;
     }
 
     @SuppressLint("HandlerLeak")
@@ -281,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             if (msg.what > 0) {
                 //有效车辆
-                carConnect.setText(getResources().getString(R.string.connected)+":"+connectedCarArr.size());
+                carConnect.setText(getResources().getString(R.string.connected) + ":" + connectedCarArr.size());
 
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.car_connected) + "" + msg.what, Toast.LENGTH_SHORT).show();
             } else {
@@ -291,70 +302,67 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     @SuppressLint("HandlerLeak")
-    public Handler handlerNetWorkErr = new Handler(){
+    public Handler handlerNetWorkErr = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg){
+        public void handleMessage(@NonNull Message msg) {
             Toast.makeText(MainActivity.this, getResources().getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
         }
     };
 
 
-
     @SuppressLint("HandlerLeak")
-    public  Handler handlerCarItem = new Handler(){
+    public Handler handlerCarItem = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            Log.i("Car","");
-           carAdapter.notifyDataSetChanged();
+            Log.i("Car", "");
+            carAdapter.notifyDataSetChanged();
 
         }
     };
 
     @SuppressLint("HandlerLeak")
-    public  Handler handlerCreatePoint= new Handler(){
+    public Handler handlerCreatePoint = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
 
-            if(msg.what == 1) {
+            if (msg.what == 1) {
                 Bundle bundle = msg.getData();
                 MapH = bundle.getInt("mapHeight");
                 MapW = bundle.getInt("mapWidth");
-                Log.i("Point","X:"+ bundle.getInt("pointX")+"Y:"+bundle.getInt("pointY"));
-                createMapPoint(bundle.getInt("mapWidth"),bundle.getInt("mapHeight"),  bundle.getInt("pointX"), bundle.getInt("pointY"),bundle.getInt("id"));
+                Log.i("Point", "X:" + bundle.getInt("pointX") + "Y:" + bundle.getInt("pointY"));
+                createMapPoint(bundle.getInt("mapWidth"), bundle.getInt("mapHeight"), bundle.getInt("pointX"), bundle.getInt("pointY"), bundle.getInt("id"));
             }
 
         }
     };
     @SuppressLint("HandlerLeak")
-    public  Handler handlerCreateCarPoint= new Handler(){
+    public Handler handlerCreateCarPoint = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             Bundle bundle = msg.getData();
             int x = bundle.getInt("x");
             int y = bundle.getInt("y");
             int carId = bundle.getInt("id");
-            if(carPointArrayList.isEmpty()){
-                createCarPoint(MapW,MapH,x,y,carId);
-            }else {
+            if (carPointArrayList.isEmpty()) {
+                createCarPoint(MapW, MapH, x, y, carId);
+            } else {
                 int count = 0;
-                for (MapPoint carPoint:carPointArrayList
-                     ) {
-                    if(carPoint.getId() == carId){
-                        changeCarPoint(MapW,MapH,x,y,carId);
+                for (MapPoint carPoint : carPointArrayList) {
+                    if (carPoint.getId() == carId) {
+                        changeCarPoint(MapW, MapH, x, y, carId);
                         break;
-                    }else {
+                    } else {
                         count++;
                     }
-                    
+
                 }
-                if(count ==carPointArrayList.size()){
-                    createCarPoint(MapW,MapH,x,y,carId);
+                if (count == carPointArrayList.size()) {
+                    createCarPoint(MapW, MapH, x, y, carId);
                 }
             }
 
         }
     };
-
 
 
     //网络检查
@@ -370,6 +378,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("CarClick", "SOCKET", e);
             }
         }
+
         @Override
         public void error() {
             Looper.prepare();
@@ -383,20 +392,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void createCar(List<Integer> carsId) {
-           // int cars = connectedCarArr.size();
-            if(connectedCarArr.isEmpty()){
-                for (int carId:
-                     carsId) {
+            // int cars = connectedCarArr.size();
+            if (connectedCarArr.isEmpty()) {
+                for (int carId : carsId) {
                     connectedCarArr.add(new ConnectedCarBean(carId));
                     handlerCarItem.sendMessage(new Message());
 
                 }
-            }else {
+            } else {
                 connectedCarArr.clear();
                 delPointsAll(carPointArrayList);
                 carPointArrayList.clear();
-                for (int carId:
-                        carsId) {
+                for (int carId : carsId) {
                     connectedCarArr.add(new ConnectedCarBean(carId));
                     handlerCarItem.sendMessage(new Message());
 
@@ -408,22 +415,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void createPoint(List<Integer> pointsId, Map pointsPosition ,Map mapSize) {
+        public void createPoint(List<Integer> pointsId, Map pointsPosition, Map mapSize) {
 
             int mapWidth = (int) mapSize.get("w");
-            int mapHeight= (int) mapSize.get("h");
-            for (Integer pId:pointsId) {
+            int mapHeight = (int) mapSize.get("h");
+            for (Integer pId : pointsId) {
                 Map navPointMap = (Map) pointsPosition.get(pId.toString());
-                int pointX = Integer.parseInt((String) navPointMap.get("x"));
-                int pointY = Integer.parseInt((String) navPointMap.get("y"));
+                int pointX = (int) navPointMap.get("x");
+                int pointY = (int) navPointMap.get("y");
                 Message msg = new Message();
                 msg.what = 1;
                 Bundle bundle = new Bundle();
-                bundle.putInt("mapWidth",mapWidth);
-                bundle.putInt("mapHeight",mapHeight);
-                bundle.putInt("pointX",pointX);
-                bundle.putInt("pointY",pointY);
-                bundle.putInt("id",pId);
+                bundle.putInt("mapWidth", mapWidth);
+                bundle.putInt("mapHeight", mapHeight);
+                bundle.putInt("pointX", pointX);
+                bundle.putInt("pointY", pointY);
+                bundle.putInt("id", pId);
                 msg.setData(bundle);
                 handlerCreatePoint.handleMessage(msg);
             }
@@ -433,8 +440,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void setCarStatus(int carId, Map carStatus) {
-            for(ConnectedCarBean car:connectedCarArr){
-                if(car.getCarIndex() == carId){
+            for (ConnectedCarBean car : connectedCarArr) {
+                if (car.getCarIndex() == carId) {
                     car.setCarBattery((Integer) carStatus.get("electricity"));
                     car.setAngle((Integer) carStatus.get("angle"));
                     car.setSpeed((Integer) carStatus.get("speed"));
@@ -452,25 +459,27 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void navPointSet(Map pointsPosition, Map mapSize, int count) {
+
             MapW = (int) mapSize.get("w");
             MapH = (int) mapSize.get("h");
-            if(!navPointArrayList.isEmpty()) {
+            if (!navPointArrayList.isEmpty()) {
                 delPointsAll(navPointArrayList);
                 navPointArrayList.clear();
             }
             Iterator<Map.Entry<String, Map>> entries = pointsPosition.entrySet().iterator();
-            while (entries.hasNext()){
-                Map.Entry<String,Map> entry = entries.next();
+            while (entries.hasNext()) {
+                Map.Entry<String, Map> entry = entries.next();
                 int id = Integer.parseInt(entry.getKey());
                 Map xy = entry.getValue();
-                int x =Integer.parseInt((String) xy.get("x"));
-                int y = Integer.parseInt((String) xy.get("y"));
-                createNavPoint(MapW,MapH,x,y,id);
+                int x =  (int)xy.get("x");
+                int y =  (int)xy.get("y");
+                Log.i("Maps",x+":"+y);
+                createNavPoint(MapW, MapH, x, y, id);
             }
 
-            new Thread(()->{
+            new Thread(() -> {
                 try {
-                    Log.i("DEL","StartDel");
+                    Log.i("DEL", "StartDel");
                     Thread.sleep(5000);
 
                     delPointsAll(navPointArrayList);
@@ -485,10 +494,10 @@ public class MainActivity extends AppCompatActivity {
         public void carPointSet(int x, int y, int carId) {
             Message msg = new Message();
             msg.what = 1;
-            Bundle data  = new Bundle();
-            data.putInt("x",x);
-            data.putInt("y",y);
-            data.putInt("id",carId);
+            Bundle data = new Bundle();
+            data.putInt("x", x);
+            data.putInt("y", y);
+            data.putInt("id", carId);
             msg.setData(data);
             handlerCreateCarPoint.handleMessage(msg);
 
@@ -507,8 +516,7 @@ public class MainActivity extends AppCompatActivity {
         initDramaBeans();
         initSocket();
 
-       // initTESTCAR(); //测试函数
-
+        // initTESTCAR(); //测试函数
 
 
     }
@@ -522,22 +530,21 @@ public class MainActivity extends AppCompatActivity {
         BackApp = findViewById(R.id.back_app);
         MainMenu = findViewById(R.id.main_menu);
         CarMenu = findViewById(R.id.car_menu);
-        carConnect =findViewById(R.id.car_connect);
+        carConnect = findViewById(R.id.car_connect);
         ExitApp = findViewById(R.id.exit_app);
         map = findViewById(R.id.map);
         joy = findViewById(R.id.joy);
-        pointClick =findViewById(R.id.point_start);
+        pointClick = findViewById(R.id.point_start);
         viewCar2 = findViewById(R.id.view_car_2);
-        cilckPoint =findViewById(R.id.click_point);
+        cilckPoint = findViewById(R.id.click_point);
         pointStartBtn = findViewById(R.id.point_start_btn);
         carListR = findViewById(R.id.car_list);
 
-        view_deafult_btn =findViewById(R.id.view_change_deafult);
-        circleViewByImage =findViewById(R.id.joystick_view);
+        view_deafult_btn = findViewById(R.id.view_change_deafult);
+        circleViewByImage = findViewById(R.id.joystick_view);
         DramaList.setAdapter(DramaAdapter);
         carList.setAdapter(carAdapter);
         circleViewByImage.setCallback(callback2);
-
 
 
     }
@@ -550,7 +557,6 @@ public class MainActivity extends AppCompatActivity {
             if (MyServer.MySocket != null) {
 
 
-
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.network_success), Toast.LENGTH_SHORT).show();
             } else {
 
@@ -560,10 +566,10 @@ public class MainActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if(MyServer.MySocket != null) {
+                if (MyServer.MySocket != null) {
 
                     Toast.makeText(MainActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Toast.makeText(MainActivity.this, getResources().getString(R.string.network_success), Toast.LENGTH_SHORT).show();
                 }
                 connectedCarArr.clear();
@@ -576,8 +582,8 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(() -> {
 
                     try {
-                        MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_CARS,false));
-                        MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_POINTS,false));
+                        MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_CARS, false));
+                        MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_POINTS, false));
 
                     } catch (Exception e) {
                         Log.e("CarClick", "SOCKET", e);
@@ -590,58 +596,56 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ExitApp.setOnClickListener(view ->{
+        ExitApp.setOnClickListener(view -> {
 
             super.finishAffinity();
             System.exit(0);
 
         });
-        BackApp.setOnClickListener( view ->{
+        BackApp.setOnClickListener(view -> {
             MainMenu.setVisibility(View.VISIBLE);
             CarMenu.setVisibility(View.GONE);
             joy.setVisibility(View.VISIBLE);
             pointClick.setVisibility(View.GONE);
             viewCar2.setText("视角控制");
         });
-        Test.setOnClickListener( view -> {
-            if(MyServer.MySocket != null && !connectedCarArr.isEmpty()) {
+        Test.setOnClickListener(view -> {
+            if (MyServer.MySocket != null && !connectedCarArr.isEmpty()) {
                 MainMenu.setVisibility(View.GONE);
                 CarMenu.setVisibility(View.VISIBLE);
                 joy.setVisibility(View.VISIBLE);
                 pointClick.setVisibility(View.GONE);
                 viewCar2.setText("视角控制");
-            }else {
+            } else {
 
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.no_car_live), Toast.LENGTH_SHORT).show();
 
             }
         });
 
-        view_deafult_btn.setOnClickListener( view -> {
+        view_deafult_btn.setOnClickListener(view -> {
 
-            if(MyServer.MySocket != null && clickCarId != 0){
-                new Thread(
-                        ()->{
-                            try{
-                                MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.U3D_VIEW(clickCarId,0),true));
-                            }catch (Exception e){
+            if (MyServer.MySocket != null && clickCarId != 0) {
+                new Thread(() -> {
+                    try {
+                        MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.U3D_VIEW(clickCarId, 0), true));
+                    } catch (Exception e) {
 
-                            }
-                        }
+                    }
+                }
 
                 ).start();
             }
         });
         pointStartBtn.setOnClickListener(view -> {
-            if(MyServer.MySocket != null && clickCarId != 0){
-                new Thread(
-                        ()->{
-                            try{
-                                MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.NAV_END(pointIdClick,clickCarId),false));
-                            }catch (Exception e){
+            if (MyServer.MySocket != null && clickCarId != 0) {
+                new Thread(() -> {
+                    try {
+                        MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.NAV_END(pointIdClick, clickCarId), false));
+                    } catch (Exception e) {
 
-                            }
-                        }
+                    }
+                }
 
                 ).start();
             }
@@ -652,7 +656,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //情景部分
-    public  static int CurrentDrama = dramaBeans.size();
+    public static int CurrentDrama = dramaBeans.size();
     // 情景列表
     public BaseAdapter DramaAdapter = new BaseAdapter() {
         @Override
@@ -673,20 +677,18 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint({"SetTextI18n", "ResourceType"})
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            @SuppressLint("ViewHolder")
-            View view = View.inflate(MainActivity.this, R.layout.item_drama, null);
+            @SuppressLint("ViewHolder") View view = View.inflate(MainActivity.this, R.layout.item_drama, null);
             ImageView img = view.findViewById(R.id.image_ico);
             ImageView OnOff = view.findViewById(R.id.on_off);
             TextView drama = view.findViewById(R.id.drama);
 
             OnOff.setOnClickListener(v -> {
-                if (MyServer.MySocket != null)
-                {
+                if (MyServer.MySocket != null) {
                     new Thread(() -> {
                         try {
-                            byte[] data = MyServer.createByte(Agreement.DRAMA(position+1),false);
+                            byte[] data = MyServer.createByte(Agreement.DRAMA(position + 1), false);
                             CurrentDrama = 6;
-                            if(!getItem(position).isStop&&!getItem(position).isPending) {
+                            if (!getItem(position).isStop && !getItem(position).isPending) {
                                 for (int i = 0; i < CurrentDrama; i++) {
                                     if (i == position) {
                                         getItem(position).isStop = true;
@@ -699,7 +701,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 handlerDrama.sendMessage(new Message());
                                 MyServer.MySocket.getOutputStream().write(data);
-                            }else {
+                            } else {
                                 Looper.prepare();
                                 Toast.makeText(MainActivity.this, getResources().getString(R.string.drama_wait), Toast.LENGTH_SHORT).show();
                             }
@@ -709,17 +711,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).start();
                 } else {
-                    if(!getItem(position).isStop&&!getItem(position).isPending){
+                    if (!getItem(position).isStop && !getItem(position).isPending) {
                         CurrentDrama = 6;
-                        for (int i=0 ; i<CurrentDrama ;i++){
+                        for (int i = 0; i < CurrentDrama; i++) {
 
-                                getItem(i).isStop =false;
-                                getItem(i).isPending = true;
+                            getItem(i).isStop = false;
+                            getItem(i).isPending = true;
 
                         }
                         DramaAdapter.notifyDataSetChanged();
                         Toast.makeText(MainActivity.this, getResources().getString(R.string.drama_wait), Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, getResources().getString(R.string.drama_wait), Toast.LENGTH_SHORT).show();
 
                     }
@@ -728,19 +730,19 @@ public class MainActivity extends AppCompatActivity {
 
             img.setImageResource(getItem(position).DramaImgId);
             drama.setText(getItem(position).DramaName);
-            if(getItem(position).isPending&&!getItem(position).isStop){
+            if (getItem(position).isPending && !getItem(position).isStop) {
                 OnOff.setImageResource(R.drawable.pending);
             }
-            if(getItem(position).isStop&&!getItem(position).isPending){
+            if (getItem(position).isStop && !getItem(position).isPending) {
                 OnOff.setImageResource(R.drawable.stop);
-            }else if(!getItem(position).isStop && !getItem(position).isPending) {
+            } else if (!getItem(position).isStop && !getItem(position).isPending) {
                 OnOff.setImageResource(R.drawable.start);
             }
             return view;
         }
     };
 
-    public int  clickCarId  = 0;
+    public int clickCarId = 0;
 
     public BaseAdapter carAdapter = new BaseAdapter() {
         @Override
@@ -749,7 +751,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public  ConnectedCarBean getItem(int position) {
+        public ConnectedCarBean getItem(int position) {
             return connectedCarArr.get(position);
         }
 
@@ -766,28 +768,28 @@ public class MainActivity extends AppCompatActivity {
             TextView carTitle = view.findViewById(R.id.car_title);
             TextView carBattery = view.findViewById(R.id.car_battery);
             TextView carSpeed = view.findViewById(R.id.car_speed);
-            TextView carNow =  view.findViewById(R.id.car_now);
+            TextView carNow = view.findViewById(R.id.car_now);
             TextView carWill = view.findViewById(R.id.car_will);
-            view.setOnClickListener( v-> {
+            view.setOnClickListener(v -> {
 
                 clickCarId = connectedCarArr.get(position).getCarIndex();
                 connectedCarArr.get(position).setOnclick(true);
 
-                for (ConnectedCarBean obj:connectedCarArr) {
-                    if(obj.getCarIndex() != connectedCarArr.get(position).getCarIndex() ){
+                for (ConnectedCarBean obj : connectedCarArr) {
+                    if (obj.getCarIndex() != connectedCarArr.get(position).getCarIndex()) {
                         obj.setOnclick(false);
                     }
                 }
                 carAdapter.notifyDataSetChanged();
             });
-            if(connectedCarArr.get(position).isOnclick()){
+            if (connectedCarArr.get(position).isOnclick()) {
                 view1.setBackgroundResource(R.drawable.item_blue_selected);
-            }else {
+            } else {
                 view1.setBackgroundResource(R.drawable.button_circle_shape_item);
             }
-            carTitle.setText("车"+connectedCarArr.get(position).getCarIndex()+"  "+"  ");
-            carBattery.setText("电量:"+connectedCarArr.get(position).getCarBattery()+"%");
-            carSpeed.setText("速度:"+connectedCarArr.get(position).getSpeed()+"km/h");
+            carTitle.setText("车" + connectedCarArr.get(position).getCarIndex() + "  " + "  ");
+            carBattery.setText("电量:" + connectedCarArr.get(position).getCarBattery() + "%");
+            carSpeed.setText("速度:" + connectedCarArr.get(position).getSpeed() + "km/h");
             return view;
 
         }
@@ -801,9 +803,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void forwardMove() {
 
-            Log.i("MOVE","up");
-            try{
-                if(MyServer.MySocket != null &&clickCarId !=0){
+            Log.i("MOVE", "up");
+            try {
+                if (MyServer.MySocket != null && clickCarId != 0) {
                     new Thread(() -> {
                         byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId, 1), true);
                         try {
@@ -813,16 +815,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).start();
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
 
         @Override
         public void backMove() {
-            Log.i("MOVE","down");
-            try{
-                if(MyServer.MySocket != null && clickCarId !=0){
+            Log.i("MOVE", "down");
+            try {
+                if (MyServer.MySocket != null && clickCarId != 0) {
                     new Thread(() -> {
                         byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId, 2), true);
                         try {
@@ -832,16 +834,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).start();
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
 
         @Override
-        public void leftMove(){
-            Log.i("MOVE","left");
-            try{
-                if(MyServer.MySocket != null && clickCarId !=0){
+        public void leftMove() {
+            Log.i("MOVE", "left");
+            try {
+                if (MyServer.MySocket != null && clickCarId != 0) {
                     new Thread(() -> {
                         byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId, 3), true);
                         try {
@@ -851,16 +853,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).start();
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
 
         @Override
-        public void rightMove(){
-            Log.i("MOVE","right");
-            try{
-                if(MyServer.MySocket != null && clickCarId !=0){
+        public void rightMove() {
+            Log.i("MOVE", "right");
+            try {
+                if (MyServer.MySocket != null && clickCarId != 0) {
                     new Thread(() -> {
                         byte[] data = MyServer.createByte(Agreement.U3D_VIEW(clickCarId, 4), true);
                         try {
@@ -870,31 +872,26 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).start();
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
 
         @Override
         public void centerMove() {
-            Log.i("MOVE","5");
+            Log.i("MOVE", "5");
         }
 
         @Override
         public void centerClick() {
-            Log.i("MOVE","6");
+            Log.i("MOVE", "6");
         }
 
         @Override
         public void actionUp() {
-            Log.i("MOVE","7");
+            Log.i("MOVE", "7");
         }
     };
-
-
-
-
-
 
 
 }

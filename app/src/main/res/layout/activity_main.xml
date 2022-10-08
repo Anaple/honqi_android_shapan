@@ -49,8 +49,8 @@
     <!--  右侧布局  -->
     <androidx.percentlayout.widget.PercentRelativeLayout
         android:id="@+id/map"
-        android:layout_width="1018dp"
-        android:layout_height="883dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_toEndOf="@id/left"
         android:background="@drawable/map"
         app:layout_heightPercent="100%"

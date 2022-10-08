@@ -25,7 +25,7 @@ import java.util.Map;
 public class MyServer {
 
     public static String IP = "192.168.31.55";
-    public static int PORT = 1235;
+    public static int PORT = 9000;
 
     public static volatile Socket MySocket = null;
     /**
@@ -66,7 +66,7 @@ public class MyServer {
                         break;
                     }
 
-                    byte[] data = new byte[1024];
+                    byte[] data = new byte[40960];
                     try {
                         inputStream.read(data);
                     }catch (SocketException socketException){
@@ -146,6 +146,7 @@ public class MyServer {
                 int len = Integer.parseInt(lenStr, 16);
                 //截取数据
                 byte[] jsonByte = new byte[len];
+                Log.i("Len",len+":"+lenStr);
                 for (int i = 4, q = 0; q <= len - 1; i++, q++) {
                     jsonByte[q] = data[i];
                 }
