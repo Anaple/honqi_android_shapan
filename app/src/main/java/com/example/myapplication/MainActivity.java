@@ -184,8 +184,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 break;
-
-
             }
 
         }
@@ -215,12 +213,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void initDramaBeans() {
 
-        dramaBeans.add(new DramaBean(R.drawable.drama_a1_icon, "灌装测试床", false, false));
-        dramaBeans.add(new DramaBean(R.drawable.drama_a2_icon, "车人测试床", false, false));
-        dramaBeans.add(new DramaBean(R.drawable.drama_a3_icon, "车内测试床", false, false));
-        dramaBeans.add(new DramaBean(R.drawable.drama_a4_icon, "车际测试床-车路通信", false, false));
-        dramaBeans.add(new DramaBean(R.drawable.drama_a5_icon, "车际测试床-车车通信", false, false));
-        dramaBeans.add(new DramaBean(R.drawable.drama_a6_icon, "车云测试床", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama2, "绿波车速引导", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama5, "闯红灯预警 ", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama3, "上高架预警", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama12, "支付提醒", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama4, "弱势交通参与者碰撞预警", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama6, "限速预警", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama9, "道路危险状况提示", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama7, "左转辅助", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama8, "交叉口碰撞预警", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama10, "车内标牌", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama9, "异常车辆提醒", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama10, "前向碰撞提醒", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama11, "紧急制动预警", false, false));
+        dramaBeans.add(new DramaBean(R.drawable.drama10, "变道提醒", false, false));
+
 
     }
 
@@ -238,12 +245,7 @@ public class MainActivity extends AppCompatActivity {
             int serverW = 100;
             int serverH = 300;
 
-            //createMapPoint(serverW,serverH, new Random().nextInt(50), new Random().nextInt(50));
-
-
         });
-
-
     }
 
     public void initSocket() {
@@ -255,13 +257,13 @@ public class MainActivity extends AppCompatActivity {
 
                     MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_CARS, false));
                     MyServer.MySocket.getOutputStream().write(MyServer.createByte(Agreement.INIT_POINTS, false));
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
             thread.start();
         }
-        ;
     }
 
     @SuppressLint("HandlerLeak")
@@ -406,10 +408,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int carId : carsId) {
                     connectedCarArr.add(new ConnectedCarBean(carId));
                     handlerCarItem.sendMessage(new Message());
-
                 }
-
-
             }
             handler2.sendEmptyMessage(connectedCarArr.size());
         }
@@ -434,8 +433,6 @@ public class MainActivity extends AppCompatActivity {
                 msg.setData(bundle);
                 handlerCreatePoint.handleMessage(msg);
             }
-
-
         }
 
         @Override
@@ -445,11 +442,9 @@ public class MainActivity extends AppCompatActivity {
                     car.setCarBattery((Integer) carStatus.get("electricity"));
                     car.setAngle((Integer) carStatus.get("angle"));
                     car.setSpeed((Integer) carStatus.get("speed"));
-
                 }
             }
             handlerCarItem.sendMessage(new Message());
-
         }
 
         @Override
@@ -481,7 +476,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Log.i("DEL", "StartDel");
                     Thread.sleep(5000);
-
                     delPointsAll(navPointArrayList);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -500,8 +494,6 @@ public class MainActivity extends AppCompatActivity {
             data.putInt("id", carId);
             msg.setData(data);
             handlerCreateCarPoint.handleMessage(msg);
-
-
         }
     };
 
@@ -517,7 +509,6 @@ public class MainActivity extends AppCompatActivity {
         initSocket();
 
         // initTESTCAR(); //测试函数
-
 
     }
 
@@ -552,14 +543,10 @@ public class MainActivity extends AppCompatActivity {
     //系统命令模块按钮
     @SuppressLint("NewApi")
     private void initOnClickListener() {
-
         NetworkCheck.setOnClickListener(view -> {
             if (MyServer.MySocket != null) {
-
-
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.network_success), Toast.LENGTH_SHORT).show();
             } else {
-
                 initSocket();
                 try {
                     Thread.currentThread().sleep(500);
@@ -624,7 +611,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         view_deafult_btn.setOnClickListener(view -> {
-
             if (MyServer.MySocket != null && clickCarId != 0) {
                 new Thread(() -> {
                     try {

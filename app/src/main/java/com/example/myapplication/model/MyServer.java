@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class MyServer {
 
-    public static String IP = "192.168.31.55";
+    public static String IP = "192.168.0.102";
     public static int PORT = 9000;
 
     public static volatile Socket MySocket = null;
