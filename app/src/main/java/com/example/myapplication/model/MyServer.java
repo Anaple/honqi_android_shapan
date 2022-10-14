@@ -37,6 +37,7 @@ public class MyServer {
     private static final String DRAMA_FINISH = "drama_finish";
     private static final String NAV_UNITY = "nav_unity";
     private static final String SEEKER_POS = "seeker_pos";
+    private static final String ROAD_NAME = "road_name";
 
 
     public static void BeginConnection(NetWorkCallBack netWorkCallBack) {
@@ -122,7 +123,15 @@ public class MyServer {
                         Map navWH = (Map) map.get("map_size");
                         callBack.navPointSet(navPoints, navWH, pointsCount);
 
-                    } else {
+                    }if(type.equals(ROAD_NAME)){
+                        int carId = (int) dataMaps.get("car_id");
+                        String carRoad = (String) dataMaps.get("road_name");
+                        callBack.carRoad(carId,carRoad);
+
+
+
+                    }
+                    else {
                         Log.i("Maps", dataMaps.toString() + type);
                     }
 

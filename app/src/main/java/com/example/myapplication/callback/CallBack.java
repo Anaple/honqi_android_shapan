@@ -17,6 +17,8 @@ public interface CallBack {
 
     void carPointSet(int x ,int y ,int carId);
 
+    void carRoad(int carId,String roadName);
+
 
 
 

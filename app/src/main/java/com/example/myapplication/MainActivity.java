@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         layoutParams.setMargins((int) (dbw * pointW), (int) (dbh * pointH)+10, 0, 0);//4个参数按顺序分别是左上右下
         btn1.setLayoutParams(layoutParams);
         navPointArrayList.add(new MapPoint(id, btn1, serverW, serverH));
+
         map.post(new Runnable() {
             @Override
             public void run() {
@@ -194,12 +195,8 @@ public class MainActivity extends AppCompatActivity {
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null && parent instanceof ViewGroup) {
 
-                parent.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        parent.removeView(view);
-                    }
-                });
+                parent.post(() -> parent.removeView(view));
+
             }
         }
     }
@@ -495,6 +492,18 @@ public class MainActivity extends AppCompatActivity {
             msg.setData(data);
             handlerCreateCarPoint.handleMessage(msg);
         }
+
+        @Override
+        public void carRoad(int carId, String roadName) {
+            for (ConnectedCarBean car:connectedCarArr
+                 ) {
+                if(car.getCarIndex() == carId){
+                    car.setRoad(roadName);
+                    handlerCarItem.sendMessage(new Message());
+                    break;
+                }
+            }
+        }
     };
 
 
@@ -756,6 +765,10 @@ public class MainActivity extends AppCompatActivity {
             TextView carSpeed = view.findViewById(R.id.car_speed);
             TextView carNow = view.findViewById(R.id.car_now);
             TextView carWill = view.findViewById(R.id.car_will);
+
+            if(connectedCarArr.get(position).getRoad() != null){
+                carNow.setText(connectedCarArr.get(position).getRoad());
+            }
             view.setOnClickListener(v -> {
 
                 clickCarId = connectedCarArr.get(position).getCarIndex();
