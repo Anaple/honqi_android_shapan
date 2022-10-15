@@ -504,6 +504,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
+        @Override
+        public void carTarget(int carID, String roadTarget) {
+            for (ConnectedCarBean car:connectedCarArr
+            ) {
+                if(car.getCarIndex() == carID){
+                    car.setRoadTarget(roadTarget);
+                    handlerCarItem.sendMessage(new Message());
+                    break;
+                }
+            }
+
+        }
     };
 
 
@@ -767,12 +780,17 @@ public class MainActivity extends AppCompatActivity {
             TextView carWill = view.findViewById(R.id.car_will);
 
             if(connectedCarArr.get(position).getRoad() != null){
-                carNow.setText(connectedCarArr.get(position).getRoad());
+                carNow.setText("位置:"+connectedCarArr.get(position).getRoad());
+            }
+
+            if(connectedCarArr.get(position).getRoadTarget() != null){
+                carWill.setText("目的:"+connectedCarArr.get(position).getRoadTarget());
             }
             view.setOnClickListener(v -> {
 
                 clickCarId = connectedCarArr.get(position).getCarIndex();
                 connectedCarArr.get(position).setOnclick(true);
+
 
                 for (ConnectedCarBean obj : connectedCarArr) {
                     if (obj.getCarIndex() != connectedCarArr.get(position).getCarIndex()) {

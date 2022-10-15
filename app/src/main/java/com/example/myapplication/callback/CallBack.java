@@ -19,6 +19,8 @@ public interface CallBack {
 
     void carRoad(int carId,String roadName);
 
+    void carTarget(int carID,String roadTarget);
+
 
 
 

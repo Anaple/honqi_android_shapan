@@ -5,9 +5,12 @@ public class ConnectedCarBean {
     private int carIndex;
     private int carBattery;
     private boolean isOnclick;
+
     private int speed;
     private int angle;
     private String road;
+    private String roadTarget;
+
 
     public ConnectedCarBean() {
     }
@@ -70,5 +73,13 @@ public class ConnectedCarBean {
 
     public void setRoad(String road) {
         this.road = road;
+    }
+
+    public String getRoadTarget() {
+        return roadTarget;
+    }
+
+    public void setRoadTarget(String roadTarget) {
+        this.roadTarget = roadTarget;
     }
 }
