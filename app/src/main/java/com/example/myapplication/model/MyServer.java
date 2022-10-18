@@ -1,5 +1,7 @@
 package com.example.myapplication.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -41,10 +43,12 @@ public class MyServer {
     private static final String ROAD_TARGET = "road_target";
 
 
-    public static void BeginConnection(NetWorkCallBack netWorkCallBack) {
+    public static void BeginConnection(NetWorkCallBack netWorkCallBack,SharedPreferences ipSetting) {
         new Thread(() -> {
             try {
-                Socket socket = new Socket(IP, PORT);
+                String ip = ipSetting.getString("ip",IP);
+                int port = ipSetting.getInt("port",PORT);
+                Socket socket = new Socket(ip, port);
                 netWorkCallBack.success(socket);
             } catch (Exception e) {
                 System.out.println("日志消息:" + e.getMessage());

@@ -8,6 +8,7 @@ import androidx.percentlayout.widget.PercentRelativeLayout;
 import android.annotation.SuppressLint;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -225,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
         dramaBeans.add(new DramaBean(R.drawable.drama11, "紧急制动预警", false, false));
         dramaBeans.add(new DramaBean(R.drawable.drama10, "变道提醒", false, false));
 
-
     }
 
     public int pointIdClick = 0;
@@ -245,8 +245,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void initSocket() {
-        MyServer.BeginConnection(netWorkCallBack);
+    public void initSocket(SharedPreferences ipSetting) {
+        MyServer.BeginConnection(netWorkCallBack,ipSetting);
         MyServer.Begin(callBack, netWorkCallBack);
         if (MyServer.MySocket != null) {
             Thread thread = new Thread(() -> {
@@ -528,7 +528,9 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initOnClickListener();
         initDramaBeans();
-        initSocket();
+        SharedPreferences.Editor ipSettingEdit = getSharedPreferences("data", 0).edit();
+        SharedPreferences ipSetting = getSharedPreferences("data",0);
+        initSocket(ipSetting);
 
         // initTESTCAR(); //测试函数
 
@@ -569,7 +571,8 @@ public class MainActivity extends AppCompatActivity {
             if (MyServer.MySocket != null) {
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.network_success), Toast.LENGTH_SHORT).show();
             } else {
-                initSocket();
+                SharedPreferences ipSetting = getSharedPreferences("data",0);
+                initSocket(ipSetting);
                 try {
                     Thread.currentThread().sleep(500);
                 } catch (InterruptedException e) {
