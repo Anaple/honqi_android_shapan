@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class MyServer {
 
-    public static String IP = "192.168.0.106";
+    public static String IP = "192.168.0.202";
     public static int PORT = 9000;
 
     public static volatile Socket MySocket = null;
@@ -48,7 +48,7 @@ public class MyServer {
             try {
                 String ip = ipSetting.getString("ip",IP);
                 int port = ipSetting.getInt("port",PORT);
-                Socket socket = new Socket(ip, port);
+                Socket socket = new Socket(IP, PORT);
                 netWorkCallBack.success(socket);
             } catch (Exception e) {
                 System.out.println("日志消息:" + e.getMessage());
@@ -119,7 +119,6 @@ public class MyServer {
                         int y = Integer.parseInt((String) map.get("y"));
                         callBack.carPointSet(x, y, carId);
 
-
                     }
                     if (type.equals(NAV_UNITY)) {
                         Map map = (Map) dataMaps.get(NAV_UNITY);
@@ -132,8 +131,6 @@ public class MyServer {
                         int carId = (int) dataMaps.get("car_id");
                         String carRoad = (String) dataMaps.get("road_name");
                         callBack.carRoad(carId,carRoad);
-
-
 
                     }
                     if(type.equals(ROAD_TARGET)){
@@ -152,6 +149,8 @@ public class MyServer {
             }
         }).start();
     }
+
+
     /**
      *  接收解析方法
      */

@@ -78,15 +78,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void createMapPoint(int serverW, int serverH, int pointW, int pointH, int id) {
-        int w = map.getWidth();
-        int h = map.getHeight()+120;
+        int w = map.getWidth()-20;
+        int h = map.getHeight()+250;
         double dbw = (double) w / (double) serverW ;
         double dbh = (double) h / (double) serverW;
 
         Button btn1 = new Button(this);
         btn1.setBackground(getDrawable(R.drawable.drama_btn));
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(40, 40);
-        layoutParams.setMargins((int) (dbw * pointW)-15, (int) (dbh * pointH), 0, 0);//4个参数按顺序分别是左上右下
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(50, 50);
+        layoutParams.setMargins((int) (dbw * pointW), (int) (dbh * pointH), 0, 0);//4个参数按顺序分别是左上右下
         btn1.setLayoutParams(layoutParams);
         mapPointArrayList.add(new MapPoint(id, btn1, serverW, serverH));
         map.post(new Runnable() {
@@ -119,15 +119,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void createNavPoint(int serverW, int serverH, int pointW, int pointH, int id) {
 
-        int w = map.getWidth();
-        int h = map.getHeight()+100+20;
+        int w = map.getWidth()+10;
+        int h = map.getHeight()+250;
         double dbw = (double) w / (double) serverW ;
         double dbh = (double) h / (double) serverW;
 
         Button btn1 = new Button(this);
         btn1.setBackground(getDrawable(R.drawable.nav_u3d));
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(10, 10);
-        layoutParams.setMargins((int) (dbw * pointW), (int) (dbh * pointH)+10, 0, 0);//4个参数按顺序分别是左上右下
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(20, 20);
+        layoutParams.setMargins((int) (dbw * pointW), (int) (dbh * pointH), 0, 0);//4个参数按顺序分别是左上右下
         btn1.setLayoutParams(layoutParams);
         navPointArrayList.add(new MapPoint(id, btn1, serverW, serverH));
 
@@ -469,16 +469,16 @@ public class MainActivity extends AppCompatActivity {
                 createNavPoint(MapW, MapH, x, y, id);
             }
 
-            new Thread(() -> {
-                try {
-                    Log.i("DEL", "StartDel");
-                    Thread.sleep(5000);
-                    delPointsAll(navPointArrayList);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }).start();
+//            new Thread(() -> {
+//                try {
+//                    Log.i("DEL", "StartDel");
+//                    Thread.sleep(5000);
+//                    delPointsAll(navPointArrayList);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }).start();
         }
 
         @Override
